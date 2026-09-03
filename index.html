@@ -1,1141 +1,1292 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <!-- PWA / Web App Capabilities -->
-    <meta name="theme-color" content="#2563eb">
+    <title>TSS Mobile Report • Pelaporan Operasional</title>
+
+    <!-- Mobile & PWA App Meta Tags -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="FlightOps">
-    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=F+O&background=2563eb&color=fff&size=512">
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22FlightOps%20System%22%2C%22short_name%22%3A%22FlightOps%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23070a12%22%2C%22theme_color%22%3A%22%232563eb%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fui-avatars.com%2Fapi%2F%3Fname%3DF%2BO%26background%3D2563eb%26color%3Dfff%26size%3D512%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D'>
-    
-    <title>FlightOps - Smartphone & PC Edition</title>
-    
+    <meta name="apple-mobile-web-app-title" content="TSS Report">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3063/3063822.png">
+
+    <!-- Inline Web App Manifest Data URI -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"TSS Mobile Report","short_name":"TSS Report","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","description":"Aplikasi Pelaporan Operasional TSS Terminal Service Support","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3063/3063822.png","sizes":"512x512","type":"image/png"}]}'>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
-                    colors: {
-                        slate: {
-                            925: '#0b0f19',
-                            950: '#070a12',
-                        }
-                    },
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            800: '#0c4a6e',
+                        }
                     }
                 }
             }
         }
     </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-
     <style>
-        html, body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        body {
+            font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
-
-        *, *:before, *:after {
-            box-sizing: inherit;
+        /* Touch friendly optimizations */
+        input, select, textarea {
+            user-select: text;
         }
-        
-        .glass-header {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .dark .glass-header {
-            background: rgba(11, 15, 25, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
-        .dark ::-webkit-scrollbar-thumb { background: #334155; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade { animation: fadeIn 0.2s ease-out forwards; }
-
-        @keyframes shrinkProgress {
-            from { width: 100%; }
-            to { width: 0%; }
-        }
-        .animate-toast-bar { animation: shrinkProgress 3.5s linear forwards; }
-
-        .app-container {
-            transition: max-width 0.3s ease-in-out;
-        }
-
-        /* Dynamic UI Zoom Scale Wrapper */
-        #scalableWrapper {
-            transform-origin: top center;
-            transition: transform 0.2s ease;
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 1rem);
         }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col antialiased font-sans selection:bg-blue-600 selection:text-white min-h-screen">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white pb-20 sm:pb-6">
 
-    <header class="glass-header border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-30 px-3 py-2.5 flex justify-between items-center gap-2 w-full">
-        <div class="flex items-center gap-2 min-w-0">
-            <div class="w-8 h-8 rounded-xl bg-slate-900 dark:bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm flex-shrink-0">
-                <i class="fa-solid fa-plane-circle-check text-xs"></i>
-            </div>
-            <div class="min-w-0">
-                <h1 class="text-xs sm:text-sm font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5 truncate">
-                    FlightOps Hub
-                    <span id="modeBadge" class="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">MOBILE</span>
-                </h1>
-                <p class="text-[10px] text-slate-400 font-medium hidden xs:block">Real-time Airport Operations</p>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-1.5 flex-shrink-0">
-            <!-- Screen Scale Selector Dropdown -->
-            <div class="relative">
-                <select id="scaleSelector" onchange="changeScreenScale(this.value)" class="bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-[11px] font-bold py-1.5 px-2 rounded-lg border border-slate-200 dark:border-slate-800 outline-none cursor-pointer">
-                    <option value="0.85">Scale: 85%</option>
-                    <option value="1.0" selected>Scale: 100%</option>
-                    <option value="1.15">Scale: 115%</option>
-                    <option value="1.25">Scale: 125%</option>
-                </select>
+    <!-- Mobile Top App Header Bar -->
+    <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md border-b border-slate-800">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600 w-10 h-10 rounded-xl shadow-lg shadow-blue-500/30 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-plane-departure text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-base font-bold leading-tight tracking-wide flex items-center gap-2">
+                        TSS Mobile Report
+                        <span class="text-[10px] bg-blue-500/20 text-blue-400 font-semibold px-2 py-0.5 rounded-full border border-blue-500/30">v2.5</span>
+                    </h1>
+                    <p class="text-[11px] text-slate-400">Terminal Service Support • Airport Ops</p>
+                </div>
             </div>
 
-            <!-- View Mode Toggle (Mobile vs PC) -->
-            <button onclick="toggleViewMode()" id="viewModeToggleBtn" title="Beralih Mode Tampilan" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 text-xs font-bold border border-slate-200 dark:border-slate-800 transition-colors">
-                <i id="viewModeIcon" class="fa-solid fa-desktop"></i>
-                <span id="viewModeText" class="hidden sm:inline">Mode PC</span>
-            </button>
-
-            <button onclick="loadData()" title="Sinkronkan" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xs border border-slate-200 dark:border-slate-800 transition-colors">
-                <i class="fa-solid fa-rotate-right"></i>
-            </button>
-
-            <button onclick="toggleTheme()" title="Mode" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xs border border-slate-200 dark:border-slate-800 transition-colors">
-                <i id="themeIcon" class="fa-solid fa-moon"></i>
-            </button>
-
-            <div class="bg-slate-900 dark:bg-slate-900 text-white border border-slate-800 px-2 py-1.5 rounded-lg flex items-center gap-1.5 shadow-xs">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                <span id="currentTime" class="text-[11px] font-mono font-bold tracking-wider">00:00:00</span>
+            <div class="flex items-center space-x-2">
+                <span id="liveClock" class="hidden sm:inline-block text-xs font-mono bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700 text-slate-300">
+                    00:00:00 WIB
+                </span>
+                <button onclick="showInstallPWAInstruction()" class="p-2 text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 text-xs flex items-center gap-1.5 transition" title="Instal Aplikasi ke HP">
+                    <i class="fa-solid fa-mobile-screen-button text-blue-400"></i>
+                    <span class="hidden md:inline font-medium">Instal App</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <div id="scalableWrapper" class="flex-1 flex flex-col w-full">
-        <main id="appMainContainer" class="app-container flex-1 p-2.5 max-w-lg w-full mx-auto flex flex-col gap-2.5 overflow-hidden">
+    <main class="flex-grow max-w-5xl w-full mx-auto px-3 sm:px-6 py-4">
 
-            <!-- Master Type Selector (Arrival vs Departure Tabs) -->
-            <div class="grid grid-cols-2 gap-1.5 bg-slate-200/70 dark:bg-slate-900 p-1 rounded-xl border border-slate-300/60 dark:border-slate-800 w-full">
-                <button onclick="setMasterType('ARRIVAL')" id="masterTabArrival" class="py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 bg-white dark:bg-blue-600 text-slate-900 dark:text-white shadow-xs">
-                    <i class="fa-solid fa-plane-arrival"></i>
-                    <span>Arrival</span>
-                </button>
-                <button onclick="setMasterType('DEPARTURE')" id="masterTabDeparture" class="py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
-                    <i class="fa-solid fa-plane-departure"></i>
-                    <span>Departure</span>
-                </button>
-            </div>
+        <!-- TAB 1: FORM & PREVIEW BUILDER -->
+        <div id="formTab" class="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-            <!-- Search & Quick Action Toolbar -->
-            <div class="bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80 shadow-xs flex flex-col gap-2 w-full">
-                <div class="flex items-center gap-2 w-full">
-                    <div class="relative flex-1 min-w-0">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                        </div>
-                        <input type="text" id="searchInput" onkeyup="handleSearch()"
-                            class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white text-xs font-medium rounded-lg block w-full pl-8 pr-7 py-2.5 outline-none focus:border-blue-500 transition-colors placeholder:text-slate-400" 
-                            placeholder="Cari penerbangan...">
-                        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                            <i class="fa-solid fa-xmark text-xs"></i>
+            <!-- LEFT COLUMN: INPUT FORM (7 Cols) -->
+            <div class="lg:col-span-7 space-y-4">
+
+                <!-- Section: Informasi Umum -->
+                <div class="bg-white rounded-2xl p-4.5 sm:p-5 border border-slate-200/90 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                            <i class="fa-solid fa-clipboard-user text-blue-600 mr-2 text-sm"></i> Metadata & Informasi
+                        </h2>
+                        <button onclick="resetForm()" class="text-xs text-rose-600 hover:text-rose-700 font-semibold transition flex items-center gap-1 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-100">
+                            <i class="fa-solid fa-arrow-rotate-right"></i> Reset
                         </button>
                     </div>
 
-                    <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3.5 py-2.5 rounded-lg text-xs flex items-center gap-1.5 shadow-xs flex-shrink-0 transition-colors">
-                        <i class="fa-solid fa-plus text-xs"></i>
-                        <span id="btnAddText">Entri</span>
-                    </button>
-                </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+                        <!-- Salam -->
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Salam Pembuka (Otomatis)</label>
+                            <select id="inputGreeting" onchange="isGreetingManuallySet = true; generateReportText()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                                <option value="Selamat Pagi">Selamat Pagi 🌅</option>
+                                <option value="Selamat Siang">Selamat Siang ☀️</option>
+                                <option value="Selamat Sore">Selamat Sore 🌇</option>
+                                <option value="Selamat Malam">Selamat Malam 🌙</option>
+                            </select>
+                        </div>
 
-                <!-- Segmented Filter Tabs -->
-                <div class="flex items-center gap-1 overflow-x-auto scrollbar-none w-full pb-0.5" id="statusFilterTabs">
-                    <!-- Dynamically populated -->
-                </div>
-            </div>
+                        <!-- Kondisi Area -->
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Kondisi Area Saat Ini</label>
+                            <select id="inputAreaStatus" onchange="generateReportText()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                                <option value="landai">Landai</option>
+                                <option value="normal lancar">Normal Lancar</option>
+                                <option value="padat antrean">Padat Antrean</option>
+                                <option value="ramai terkendali">Ramai Terkendali</option>
+                                <option value="sangat padat">Sangat Padat</option>
+                            </select>
+                        </div>
 
-            <div class="flex-1 flex flex-col overflow-hidden relative rounded-xl w-full">
-                
-                <div id="loadingOverlay" class="absolute inset-0 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-xs z-20 flex flex-col items-center justify-center">
-                    <div class="w-8 h-8 border-3 border-blue-200 dark:border-blue-900 border-t-blue-600 rounded-full animate-spin"></div>
-                    <p id="loadingText" class="text-xs font-semibold text-slate-600 dark:text-slate-300 mt-2.5">Memuat data dari database...</p>
-                </div>
+                        <!-- Lokasi Area -->
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Lokasi Area</label>
+                            <div class="space-y-1.5">
+                                <select id="inputLocationSelect" onchange="handleLocationChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-bold">
+                                    <option value="Checkin">Checkin</option>
+                                    <option value="Curbside">Curbside</option>
+                                    <option value="Plaza">Plaza</option>
+                                    <option value="Parkir">Parkir</option>
+                                    <option value="BCB Internasional">BCB Internasional</option>
+                                    <option value="Cencor Arrival">Cencor Arrival</option>
+                                    <option value="Pier 1">Pier 1</option>
+                                    <option value="Boarding Lounge">Boarding Lounge</option>
+                                    <option value="Toilet">Toilet 🚽</option>
+                                    <option value="Mushola">Mushola 🕌</option>
+                                    <option value="custom">✏️ Tulis Lokasi Kustom...</option>
+                                </select>
+                                <input type="text" id="inputLocationCustom" oninput="updateCustomLocation()" placeholder="Ketik lokasi kustom..." class="hidden w-full bg-white border border-blue-400 rounded-xl px-3 py-2 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                <input type="hidden" id="inputLocation" value="Checkin">
+                            </div>
+                        </div>
 
-                <div id="emptyState" class="hidden absolute inset-0 z-10 flex flex-col items-center justify-center text-slate-400 p-6 text-center">
-                    <i class="fa-solid fa-plane-circle-exclamation text-2xl text-slate-300 dark:text-slate-700 mb-2"></i>
-                    <h3 class="text-xs font-bold text-slate-600 dark:text-slate-400">Tidak Ada Data</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Silakan tambahkan data baru atau sesuaikan pencarian.</p>
-                </div>
+                        <!-- Detail Toilet -->
+                        <div id="toiletDetailContainer" class="hidden">
+                            <label class="block font-semibold text-teal-800 mb-1">
+                                <i class="fa-solid fa-restroom text-teal-600 mr-1"></i> Detail / Nama Toilet
+                            </label>
+                            <input type="text" id="inputToiletDetail" oninput="generateReportText()" placeholder="Contoh: Gate 14 / Kedatangan Pier 1" class="w-full bg-teal-50/60 border border-teal-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-teal-500 focus:outline-none font-medium">
+                        </div>
 
-                <!-- Mobile Card Stream -->
-                <div id="mobileCardList" class="overflow-y-auto flex-1 space-y-2.5 pb-2 w-full">
-                    <!-- Dynamically populated -->
-                </div>
+                        <!-- Detail Mushola -->
+                        <div id="musholaDetailContainer" class="hidden">
+                            <label class="block font-semibold text-emerald-800 mb-1">
+                                <i class="fa-solid fa-mosque text-emerald-600 mr-1"></i> Detail / Nama Mushola
+                            </label>
+                            <input type="text" id="inputMusholaDetail" oninput="generateReportText()" placeholder="Contoh: Gate 13 / Area Departure" class="w-full bg-emerald-50/60 border border-emerald-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+                        </div>
 
-                <!-- PC Table View -->
-                <div id="pcTableView" class="hidden overflow-y-auto flex-1 bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800/80 shadow-xs w-full">
-                    <table class="w-full text-left border-collapse">
-                        <thead id="pcTableHead" class="sticky top-0 bg-slate-100/95 dark:bg-slate-950/95 backdrop-blur-xs text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200 dark:border-slate-800 z-10">
-                            <!-- Dynamically populated -->
-                        </thead>
-                        <tbody id="pcTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium">
-                            <!-- Dynamically populated -->
-                        </tbody>
-                    </table>
-                </div>
+                        <!-- Hari & Tanggal -->
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Hari & Tanggal Laporan</label>
+                            <input type="date" id="inputDate" onchange="generateReportText()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                        </div>
 
-                <div class="bg-white dark:bg-slate-900 px-3.5 py-2.5 border-t border-slate-200/80 dark:border-slate-800/80 flex justify-between items-center text-[11px] text-slate-500 dark:text-slate-400 font-medium rounded-xl mt-2 shadow-xs w-full">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        <span id="totalDataCount">0 penerbangan</span>
+                        <!-- Nama Petugas -->
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Petugas TSS</label>
+                            <input type="text" id="inputOfficer" value="" oninput="generateReportText()" placeholder="Nama Lengkap Petugas" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                        </div>
+
+                        <!-- Unit / Tim -->
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Unit / Tim</label>
+                            <input type="text" id="inputUnit" value="TSS T3 Internasional" oninput="generateReportText()" placeholder="Contoh: TSS T3 Internasional" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                        </div>
                     </div>
-                    <span class="text-[10px] text-slate-400" id="footerHint">Ketuk kartu untuk detail</span>
                 </div>
-            </div>
-        </main>
-    </div>
 
-    <div id="modalBackdrop" onclick="closeModal()" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 transition-opacity opacity-0"></div>
-    <div id="formModal" class="hidden fixed inset-x-0 bottom-0 z-50 transform transition-all duration-250">
-        <div class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 rounded-t-2xl shadow-xl p-4 max-h-[85vh] overflow-y-auto w-full">
-            
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-3.5">
-                <h3 id="modalTitleText" class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <i class="fa-solid fa-pen-to-square text-blue-600 dark:text-blue-400 text-xs"></i>
-                    <span id="modalHeaderLabel">Entri Data</span>
-                </h3>
-                <button onclick="closeModal()" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-xs hover:bg-slate-200 dark:hover:bg-slate-700">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <!-- Section: Pengecekan Fasilitas -->
+                <div class="bg-white rounded-2xl p-4.5 sm:p-5 border border-slate-200/90 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
+                        <div>
+                            <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-list-check text-blue-600 mr-2 text-sm"></i> Status Pengecekan Fasilitas
+                            </h2>
+                            <p class="text-[11px] text-slate-500">Tap emoji untuk mengubah kondisi status</p>
+                        </div>
+
+                        <!-- Action buttons for Quick Status & Presets -->
+                        <div class="flex flex-wrap items-center gap-1.5 pt-1 sm:pt-0">
+                            <button id="btnPresetGeneral" onclick="loadFacilityPreset('general')" class="text-xs px-2.5 py-1.5 bg-blue-600 text-white border border-blue-700 rounded-lg font-medium shadow-sm transition active:scale-95">
+                                🏢 Umum
+                            </button>
+                            <button id="btnPresetToilet" onclick="loadFacilityPreset('toilet')" class="text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95">
+                                🚽 Toilet
+                            </button>
+                            <button id="btnPresetMushola" onclick="loadFacilityPreset('mushola')" class="text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95">
+                                🕌 Mushola
+                            </button>
+                            <button onclick="setAllFacilityStatus('✅')" class="text-xs px-2.5 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg font-semibold hover:bg-emerald-100 transition active:scale-95">
+                                <i class="fa-solid fa-check-double mr-1"></i> Semua OK ✅
+                            </button>
+                            <button onclick="openAddFacilityModal()" class="text-xs px-2.5 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg font-semibold hover:bg-blue-100 transition active:scale-95">
+                                <i class="fa-solid fa-plus mr-1"></i> Item
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Facility Items Grid -->
+                    <div id="facilityContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <!-- Items rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Section: Catatan / Note -->
+                <div class="bg-white rounded-2xl p-4.5 sm:p-5 border border-slate-200/90 shadow-sm space-y-3.5">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                            <i class="fa-solid fa-note-sticky text-amber-500 mr-2 text-sm"></i> Catatan Kendala / Note
+                        </h2>
+                        <button onclick="addNoteField()" class="text-xs text-blue-600 hover:text-blue-700 font-bold transition flex items-center gap-1 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
+                            <i class="fa-solid fa-plus"></i> Tambah Note
+                        </button>
+                    </div>
+
+                    <div id="notesContainer" class="space-y-2">
+                        <!-- Dynamic note inputs -->
+                    </div>
+                </div>
+
+                <!-- Section: Dokumentasi Foto -->
+                <div class="bg-white rounded-2xl p-4.5 sm:p-5 border border-slate-200/90 shadow-sm space-y-3.5">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div>
+                            <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-camera text-blue-600 mr-2 text-sm"></i> Dokumentasi Foto (<span id="photoCount">0</span>/10)
+                            </h2>
+                            <p class="text-[11px] text-slate-500">Unggah hingga 10 foto bukti kegiatan</p>
+                        </div>
+                        <button onclick="clearAllPhotos()" id="btnClearPhotos" class="hidden text-xs text-rose-600 hover:text-rose-700 font-semibold transition flex items-center gap-1 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-100">
+                            <i class="fa-solid fa-trash-can"></i> Hapus Foto
+                        </button>
+                    </div>
+
+                    <!-- File Inputs for Camera and File Picker -->
+                    <input type="file" id="cameraFileInput" accept="image/*" capture="environment" onchange="handleImageUpload(event)" class="hidden">
+                    <input type="file" id="galleryFileInput" accept="image/*" multiple onchange="handleImageUpload(event)" class="hidden">
+
+                    <!-- Upload Action Buttons -->
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <button type="button" onclick="triggerFileInput('cameraFileInput')" class="flex items-center justify-center p-3 bg-blue-50 hover:bg-blue-100/80 border border-blue-200/80 rounded-xl text-blue-800 font-semibold text-xs transition gap-2 shadow-sm active:scale-95">
+                            <i class="fa-solid fa-camera text-base text-blue-600"></i>
+                            <span>Ambil Kamera</span>
+                        </button>
+
+                        <button type="button" onclick="triggerFileInput('galleryFileInput')" class="flex items-center justify-center p-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 font-semibold text-xs transition gap-2 shadow-sm active:scale-95">
+                            <i class="fa-solid fa-images text-base text-slate-600"></i>
+                            <span>Galeri / File</span>
+                        </button>
+                    </div>
+
+                    <!-- Photo Thumbnails Grid -->
+                    <div id="photoPreviewGrid" class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-2 pt-1">
+                        <!-- Dynamic Thumbnails -->
+                    </div>
+                </div>
+
             </div>
 
-            <form id="flightForm" onsubmit="event.preventDefault(); saveData();" class="space-y-3">
-                <input type="hidden" id="recordId">
-                <div id="dynamicFormFields" class="space-y-3"></div>
-                <div class="pt-2">
-                    <button type="submit" id="btnSave" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-colors shadow-xs flex items-center justify-center gap-2">
-                        <span id="btnSaveSpinner" class="hidden w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                        <span id="btnSaveText">Simpan Data</span>
+            <!-- RIGHT COLUMN: LIVE OUTPUT & PREVIEW (5 Cols) -->
+            <div class="lg:col-span-5 space-y-4">
+
+                <!-- Live Preview Card -->
+                <div class="bg-white rounded-2xl p-4.5 sm:p-5 border border-slate-200/90 shadow-sm sticky top-20">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3.5">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-brands fa-whatsapp text-2xl text-emerald-500"></i>
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Preview Pesan WA</h3>
+                                <p class="text-[11px] text-slate-400">Siap disalin atau dibagikan</p>
+                            </div>
+                        </div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                            Live Format
+                        </span>
+                    </div>
+
+                    <!-- Chat Bubble Styled Preview -->
+                    <div class="bg-emerald-50/50 border border-emerald-200/60 rounded-xl p-3.5 font-mono text-xs text-slate-800 whitespace-pre-wrap break-words leading-relaxed min-h-[260px] max-h-[380px] overflow-y-auto select-all shadow-inner" id="reportPreviewBox">
+                        <!-- Auto-generated message -->
+                    </div>
+
+                    <!-- Photo Attachments Preview -->
+                    <div id="previewPhotosContainer" class="mt-3 hidden p-2.5 bg-emerald-100/40 rounded-xl border border-emerald-200/60">
+                        <!-- Rendered by JS -->
+                    </div>
+
+                    <!-- Action Buttons (Icon Only) -->
+                    <div class="mt-4 grid grid-cols-3 gap-2.5">
+                        <button onclick="shareReportWithPhotos()" title="Bagikan Laporan (Teks + Foto)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-3 rounded-xl shadow-md shadow-emerald-600/20 flex items-center justify-center transition active:scale-95">
+                            <i class="fa-solid fa-share-nodes text-lg"></i>
+                        </button>
+
+                        <button onclick="copyReportText()" title="Salin Teks Pesan" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-3 rounded-xl shadow-md flex items-center justify-center transition active:scale-95">
+                            <i class="fa-regular fa-copy text-lg"></i>
+                        </button>
+
+                        <button onclick="saveReportToHistory()" title="Simpan ke Riwayat App" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-3 rounded-xl shadow-md shadow-blue-600/20 flex items-center justify-center transition active:scale-95">
+                            <i class="fa-solid fa-floppy-disk text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: HISTORY LOG -->
+        <div id="historyTab" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl p-4.5 sm:p-6 border border-slate-200/90 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-4">
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                            <i class="fa-solid fa-box-archive text-blue-600 mr-2"></i> Riwayat Laporan Tersimpan
+                        </h2>
+                        <p class="text-[11px] text-slate-500">Arsip laporan lokal di HP/Browser ini</p>
+                    </div>
+
+                    <button onclick="clearAllHistory()" class="px-3 py-1.5 text-xs bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 rounded-xl font-semibold transition flex items-center gap-1 self-start sm:self-auto">
+                        <i class="fa-solid fa-trash-can"></i> Bersihkan Riwayat
                     </button>
                 </div>
-            </form>
+
+                <!-- History Search -->
+                <div class="mb-4">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                        <input type="text" id="historySearchInput" oninput="filterHistoryList()" placeholder="Cari lokasi, petugas, atau isi..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- History Cards Container -->
+                <div id="historyListContainer" class="space-y-3">
+                    <!-- Dynamic rendering -->
+                </div>
+            </div>
         </div>
+
+        <!-- TAB 3: APP INFO & PWA GUIDE -->
+        <div id="infoTab" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm space-y-4">
+                <div class="border-b border-slate-100 pb-3">
+                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-mobile-screen-button text-blue-600 mr-2"></i> Instal Aplikasi di Layar Utama HP
+                    </h2>
+                    <p class="text-xs text-slate-500">Jadikan aplikasi ini seperti aplikasi Native di Android / iPhone tanpa perlu Play Store/App Store.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <!-- Android Steps -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                        <div class="flex items-center font-bold text-slate-800 gap-2">
+                            <i class="fa-brands fa-android text-emerald-600 text-lg"></i>
+                            <span>Panduan Android (Google Chrome)</span>
+                        </div>
+                        <ol class="list-decimal list-inside space-y-1.5 text-slate-600 leading-relaxed">
+                            <li>Buka halaman web ini di browser Chrome.</li>
+                            <li>Ketuk titik tiga <strong class="text-slate-800">(⋮)</strong> di sudut kanan atas.</li>
+                            <li>Pilih menu <strong class="text-slate-800">"Tambahkan ke Layar Utama"</strong> atau <strong class="text-slate-800">"Install aplikasi"</strong>.</li>
+                            <li>Selesai! Ikon TSS Report akan muncul di daftar aplikasi HP Anda.</li>
+                        </ol>
+                    </div>
+
+                    <!-- iOS Steps -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                        <div class="flex items-center font-bold text-slate-800 gap-2">
+                            <i class="fa-brands fa-apple text-slate-800 text-lg"></i>
+                            <span>Panduan iPhone / iPad (Safari)</span>
+                        </div>
+                        <ol class="list-decimal list-inside space-y-1.5 text-slate-600 leading-relaxed">
+                            <li>Buka halaman web ini menggunakan browser <strong class="text-slate-800">Safari</strong>.</li>
+                            <li>Ketuk tombol Bagikan <strong class="text-slate-800">(Share icon / kotak panah ke atas)</strong> di bagian bawah layar.</li>
+                            <li>Gulir ke bawah dan ketuk <strong class="text-slate-800">"Add to Home Screen"</strong> (Tambahkan ke Layar Utama).</li>
+                            <li>Ketuk <strong class="text-slate-800">"Add"</strong> di pojok kanan atas.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl text-xs text-blue-900 space-y-1">
+                    <p class="font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info text-blue-600"></i> Informasi Sistem
+                    </p>
+                    <p class="text-blue-800 leading-relaxed">
+                        Aplikasi Pelaporan TSS didesain khusus untuk mendukung kecepatan operasional petugas di lapangan. Data riwayat laporan disimpan secara aman pada memori lokal perangkat Anda.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar (App Shell style) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900 text-slate-400 border-t border-slate-800 py-1.5 px-3 flex justify-around items-center sm:hidden pb-safe">
+        <button onclick="switchTab('formTab')" id="mbNavForm" class="flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition">
+            <i class="fa-solid fa-pen-to-square text-base mb-0.5"></i>
+            <span class="text-[10px]">Laporan</span>
+        </button>
+        <button onclick="switchTab('historyTab')" id="mbNavHistory" class="flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition relative">
+            <i class="fa-solid fa-clock-rotate-left text-base mb-0.5"></i>
+            <span class="text-[10px]">Riwayat</span>
+            <span id="mbBadgeHistory" class="absolute top-0.5 right-1/4 bg-blue-600 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
+        </button>
+        <button onclick="switchTab('infoTab')" id="mbNavInfo" class="flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition">
+            <i class="fa-solid fa-circle-info text-base mb-0.5"></i>
+            <span class="text-[10px]">App Info</span>
+        </button>
+    </nav>
+
+    <!-- Custom Toast Notification -->
+    <div id="toastNotification" class="fixed bottom-16 sm:bottom-6 right-4 left-4 sm:left-auto sm:max-w-xs z-50 transform translate-y-20 opacity-0 transition-all duration-300 ease-out flex items-center bg-slate-900 text-white text-xs font-medium py-3 px-4 rounded-xl shadow-2xl border border-slate-700 space-x-3">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toastMessage">Pesan berhasil disalin!</span>
     </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div id="deleteModalBackdrop" onclick="closeDeleteModal()" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 transition-opacity opacity-0"></div>
-    <div id="deleteModal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 transform max-w-xs w-full px-4">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl p-5 text-center">
-            <div class="w-11 h-11 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 mx-auto flex items-center justify-center mb-3 text-base">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-            </div>
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Hapus Data?</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4 leading-relaxed">
-                Hapus penerbangan <span id="deleteFlightNoTarget" class="font-mono font-bold text-rose-600 dark:text-rose-400"></span>?
-            </p>
-            <div class="flex items-center gap-2">
-                <button type="button" onclick="closeDeleteModal()" class="flex-1 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold">Batal</button>
-                <button type="button" id="btnConfirmDelete" onclick="executeDeleteFlight()" class="flex-1 py-2.5 bg-rose-600 text-white rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1.5">
-                    <span id="btnDeleteSpinner" class="hidden w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    <span id="btnDeleteText">Hapus</span>
+    <!-- Mobile Bottom Sheet Modal for Adding Custom Facility -->
+    <div id="modalAddFacility" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white rounded-t-2xl sm:rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4 animate-in slide-in-from-bottom duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Tambah Item Fasilitas Baru</h3>
+                <button onclick="closeAddFacilityModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Fasilitas Kustom</label>
+                <input type="text" id="newFacilityInput" placeholder="Contoh: Autogate / Charging Station" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+            <div class="flex justify-end space-x-2 pt-2">
+                <button onclick="closeAddFacilityModal()" class="px-4 py-2 text-xs text-slate-600 font-semibold hover:bg-slate-100 rounded-xl transition">Batal</button>
+                <button onclick="confirmAddFacility()" class="px-5 py-2 text-xs bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition">Tambah Item</button>
+            </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-4 inset-x-4 z-50 transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none">
-        <div class="bg-slate-900 dark:bg-white text-white dark:text-slate-900 p-3 rounded-xl shadow-lg flex items-center gap-3 border border-slate-800 dark:border-slate-200 relative overflow-hidden pointer-events-auto">
-            <div id="toastIcon" class="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-white bg-emerald-500 text-xs">
-                <i class="fa-solid fa-check"></i>
-            </div>
-            <div class="flex-1 pr-1">
-                <h4 id="toastTitle" class="text-xs font-bold">Berhasil</h4>
-                <p id="toastMessage" class="text-[11px] opacity-80 leading-snug">Data diperbarui.</p>
-            </div>
-            <div id="toastProgressBar" class="absolute bottom-0 left-0 h-0.5 bg-emerald-500"></div>
-        </div>
-    </div>
-
+    <!-- JavaScript Application Logic -->
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbz4ccLBjbAqr3ARvsi2Aub8wdcSOKmiMgnpCXrWyGyTfQ2o3HxwilHRD-yPmBzUvf3i/exec";
+        // Status Options for Cycling
+        const statusOptions = ['✅', '⚠️', '🔧', '❌'];
 
-        let masterType = 'ARRIVAL';
-        let viewMode = 'MOBILE'; // 'MOBILE' or 'PC'
-        let arrivalDataCache = [];
-        let departureDataCache = [];
-        let filteredData = [];
-        let activeStatusFilter = 'ALL';
+        // Default Facilities Data
+        const defaultFacilities = [
+            { id: 'f1', name: 'Trolly', status: '✅' },
+            { id: 'f2', name: 'Wayfinding', status: '✅' },
+            { id: 'f3', name: 'digital baner', status: '✅' },
+            { id: 'f4', name: 'Fids', status: '✅' },
+            { id: 'f5', name: 'Eskalator', status: '✅' },
+            { id: 'f6', name: 'Lift', status: '✅' }
+        ];
 
-        let synth;
-        try { synth = new Tone.Synth().toDestination(); } catch(e) {}
+        const toiletPresetFacilities = [
+            { id: 'tf1', name: 'Urinoir', status: '✅' },
+            { id: 'tf2', name: 'Wastafel', status: '✅' },
+            { id: 'tf3', name: 'Cubikal', status: '✅' },
+            { id: 'tf4', name: 'Handsoap', status: '✅' },
+            { id: 'tf5', name: 'Tisu', status: '✅' },
+            { id: 'tf6', name: 'Debit air', status: '✅' }
+        ];
 
-        function playChime(type = 'info') {
-            try {
-                if (Tone.context.state !== 'running') Tone.start();
-                if (type === 'success') synth.triggerAttackRelease("C5", "8n");
-                else if (type === 'error') synth.triggerAttackRelease("G3", "8n");
-            } catch(err) {}
+        const musholaPresetFacilities = [
+            { id: 'mf1', name: 'Debit air', status: '✅' },
+            { id: 'mf2', name: 'Sajadah', status: '✅' },
+            { id: 'mf3', name: 'Sarung', status: '✅' },
+            { id: 'mf4', name: 'Mukena', status: '✅' }
+        ];
+
+        let facilities = [...defaultFacilities];
+        let currentPreset = 'general';
+        let notes = [''];
+        let uploadedPhotos = []; // Array of { id, file, base64 }
+        let reportHistory = [];
+        let isGreetingManuallySet = false;
+
+        // Auto Greeting Calculation based on real time
+        function getAutoGreeting() {
+            const now = new Date();
+            const hour = now.getHours();
+            const minutes = now.getMinutes();
+            const timeVal = hour + (minutes / 60);
+
+            if (timeVal >= 4 && timeVal < 11) {
+                return 'Selamat Pagi';
+            } else if (timeVal >= 11 && timeVal < 15) {
+                return 'Selamat Siang';
+            } else if (timeVal >= 15 && timeVal < 18.5) {
+                return 'Selamat Sore';
+            } else {
+                return 'Selamat Malam';
+            }
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
+        function setAutomaticGreeting(force = false) {
+            if (!isGreetingManuallySet || force) {
+                const greetingSelect = document.getElementById('inputGreeting');
+                if (greetingSelect) {
+                    greetingSelect.value = getAutoGreeting();
+                }
+            }
+        }
+
+        // Haptic feedback for mobile devices
+        function triggerHaptic() {
+            if ('vibrate' in navigator) {
+                try { navigator.vibrate(25); } catch(e){}
+            }
+        }
+
+        // Initial setup on Window Load
+        window.onload = function() {
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('inputDate');
+            if (dateInput) dateInput.value = today;
+
+            // Set real-time automatic greeting
+            setAutomaticGreeting();
+
+            // Load saved history
+            loadHistoryFromStorage();
+            
+            // Render Facility items
+            renderFacilities();
+
+            // Render Notes
+            renderNotes();
+
+            // Render Photo Previews
+            renderPhotoPreviews();
+
+            // Initial Report Generation
+            generateReportText();
+
+            // Start Clock
             updateClock();
             setInterval(updateClock, 1000);
-            loadData();
-            setInterval(() => loadData(true), 30000);
-        });
+        };
 
-        function changeScreenScale(scaleVal) {
-            const wrapper = document.getElementById('scalableWrapper');
-            if (wrapper) {
-                wrapper.style.transform = `scale(${scaleVal})`;
-                const scalePercentage = Math.round(parseFloat(scaleVal) * 100);
-                showToast('Skala Ukuran', `Tampilan disesuaikan ke ${scalePercentage}%`, 'info');
-            }
-        }
-
-        function toggleViewMode() {
-            viewMode = viewMode === 'MOBILE' ? 'PC' : 'MOBILE';
-            const mainContainer = document.getElementById('appMainContainer');
-            const modeBadge = document.getElementById('modeBadge');
-            const viewModeText = document.getElementById('viewModeText');
-            const viewModeIcon = document.getElementById('viewModeIcon');
-            const mobileCardList = document.getElementById('mobileCardList');
-            const pcTableView = document.getElementById('pcTableView');
-            const footerHint = document.getElementById('footerHint');
-
-            if (viewMode === 'PC') {
-                mainContainer.className = "app-container flex-1 p-3 md:p-6 max-w-6xl w-full mx-auto flex flex-col gap-2.5 overflow-hidden";
-                modeBadge.innerText = 'PC MODE';
-                viewModeText.innerText = 'Mode Smartphone';
-                viewModeIcon.className = 'fa-solid fa-mobile-screen-button';
-                mobileCardList.classList.add('hidden');
-                pcTableView.classList.remove('hidden');
-                footerHint.innerText = 'Klik baris untuk rincian';
-                showToast('Mode PC', 'Tampilan dialihkan ke mode PC / Desktop.', 'info');
-            } else {
-                mainContainer.className = "app-container flex-1 p-2.5 max-w-lg w-full mx-auto flex flex-col gap-2.5 overflow-hidden";
-                modeBadge.innerText = 'MOBILE';
-                viewModeText.innerText = 'Mode PC';
-                viewModeIcon.className = 'fa-solid fa-desktop';
-                pcTableView.classList.add('hidden');
-                mobileCardList.classList.remove('hidden');
-                footerHint.innerText = 'Ketuk kartu untuk detail';
-                showToast('Mode Smartphone', 'Tampilan dialihkan ke mode smartphone.', 'info');
-            }
-            applyFilteringAndSorting();
-        }
-
+        // Realtime Clock Header & Dynamic Greeting Check
         function updateClock() {
             const now = new Date();
-            const hrs = String(now.getHours()).padStart(2, '0');
-            const mins = String(now.getMinutes()).padStart(2, '0');
-            const secs = String(now.getSeconds()).padStart(2, '0');
-            const clockEl = document.getElementById('currentTime');
-            if (clockEl) clockEl.innerText = `${hrs}:${mins}:${secs}`;
-            
-            if (now.getSeconds() === 0 && (arrivalDataCache.length > 0 || departureDataCache.length > 0)) {
-                applyFilteringAndSorting();
+            const timeStr = now.toLocaleTimeString('id-ID', { hour12: false }) + ' WIB';
+            const clockEl = document.getElementById('liveClock');
+            if (clockEl) clockEl.innerText = timeStr;
+
+            if (!isGreetingManuallySet) {
+                const autoGreeting = getAutoGreeting();
+                const greetingSelect = document.getElementById('inputGreeting');
+                if (greetingSelect && greetingSelect.value !== autoGreeting) {
+                    greetingSelect.value = autoGreeting;
+                    generateReportText();
+                }
             }
         }
 
-        function setMasterType(type) {
-            masterType = type;
-            activeStatusFilter = 'ALL';
-            
-            const arrBtn = document.getElementById('masterTabArrival');
-            const depBtn = document.getElementById('masterTabDeparture');
-            const btnAddText = document.getElementById('btnAddText');
+        // Tab Switcher
+        function switchTab(tabId) {
+            triggerHaptic();
+            const formTab = document.getElementById('formTab');
+            const historyTab = document.getElementById('historyTab');
+            const infoTab = document.getElementById('infoTab');
 
-            if (masterType === 'ARRIVAL') {
-                arrBtn.className = "py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 bg-white dark:bg-blue-600 text-slate-900 dark:text-white shadow-xs";
-                depBtn.className = "py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
-                if (btnAddText) btnAddText.innerText = 'Entri';
+            const mbNavForm = document.getElementById('mbNavForm');
+            const mbNavHistory = document.getElementById('mbNavHistory');
+            const mbNavInfo = document.getElementById('mbNavInfo');
+
+            // Hide all tabs
+            if (formTab) formTab.classList.add('hidden');
+            if (historyTab) historyTab.classList.add('hidden');
+            if (infoTab) infoTab.classList.add('hidden');
+
+            // Reset mobile nav highlights
+            if (mbNavForm) mbNavForm.className = "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition";
+            if (mbNavHistory) mbNavHistory.className = "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition relative";
+            if (mbNavInfo) mbNavInfo.className = "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition";
+
+            if (tabId === 'historyTab') {
+                if (historyTab) historyTab.classList.remove('hidden');
+                if (mbNavHistory) mbNavHistory.className = "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition relative";
+                renderHistoryList();
+            } else if (tabId === 'infoTab') {
+                if (infoTab) infoTab.classList.remove('hidden');
+                if (mbNavInfo) mbNavInfo.className = "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition";
             } else {
-                depBtn.className = "py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 bg-white dark:bg-blue-600 text-slate-900 dark:text-white shadow-xs";
-                arrBtn.className = "py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
-                if (btnAddText) btnAddText.innerText = 'Entri';
+                if (formTab) formTab.classList.remove('hidden');
+                if (mbNavForm) mbNavForm.className = "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition";
             }
 
-            renderFilterTabs();
-            applyFilteringAndSorting();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function renderFilterTabs() {
-            const container = document.getElementById('statusFilterTabs');
+        function showInstallPWAInstruction() {
+            switchTab('infoTab');
+        }
+
+        // Format Date to Indonesian format
+        function getFormattedIndonesianDate(dateString) {
+            if (!dateString) return '';
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+            const parts = dateString.split('-');
+            if (parts.length !== 3) return dateString;
+
+            const dateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            const dayName = days[dateObj.getDay()];
+            const dayNum = dateObj.getDate();
+            const monthName = months[dateObj.getMonth()];
+            const yearNum = dateObj.getFullYear();
+
+            return `${dayName}, ${dayNum} ${monthName} ${yearNum}`;
+        }
+
+        // Generate Report Text
+        function generateReportText() {
+            const greeting = document.getElementById('inputGreeting')?.value || 'Selamat Pagi';
+            const areaStatus = document.getElementById('inputAreaStatus')?.value || 'landai';
+            const location = document.getElementById('inputLocation')?.value || 'Checkin';
+            const toiletDetail = document.getElementById('inputToiletDetail')?.value.trim() || '';
+            const musholaDetail = document.getElementById('inputMusholaDetail')?.value.trim() || '';
+            const dateVal = document.getElementById('inputDate')?.value || '';
+            const formattedDate = getFormattedIndonesianDate(dateVal);
+            const officer = document.getElementById('inputOfficer')?.value || '';
+            const unit = document.getElementById('inputUnit')?.value || 'TSS T3 Internasional';
+
+            const isToiletCheck = (currentPreset === 'toilet') || (location.toLowerCase().includes('toilet'));
+            const isMusholaCheck = (currentPreset === 'mushola') || (location.toLowerCase().includes('mushola'));
+
+            const toiletContainer = document.getElementById('toiletDetailContainer');
+            const musholaContainer = document.getElementById('musholaDetailContainer');
+            if (toiletContainer) {
+                if (isToiletCheck) toiletContainer.classList.remove('hidden');
+                else toiletContainer.classList.add('hidden');
+            }
+            if (musholaContainer) {
+                if (isMusholaCheck && !isToiletCheck) musholaContainer.classList.remove('hidden');
+                else musholaContainer.classList.add('hidden');
+            }
+
+            let message = `${greeting}\n`;
+            message += `Izin melaporkan Kegiatan\n`;
+            
+            if (isToiletCheck) {
+                message += `Pengecekan fasilitas toilet\n\n`;
+            } else if (isMusholaCheck) {
+                message += `Pengecekan fasilitas mushola\n\n`;
+            } else {
+                message += `Update terkini area ${location.toLowerCase()} saat ini ${areaStatus} dan pengecekan fasilitas\n\n`;
+            }
+
+            facilities.forEach(item => {
+                message += `•${item.name} ${item.status}\n`;
+            });
+
+            const validNotes = notes.filter(n => n.trim() !== '');
+            if (validNotes.length > 0) {
+                message += `\n`;
+                validNotes.forEach(noteText => {
+                    message += `Note: ${noteText}\n`;
+                });
+            }
+
+            message += `\nHari/Tanggal : ${formattedDate}\n`;
+            
+            if (isToiletCheck && toiletDetail) {
+                message += `Lokasi Area : ${location} (${toiletDetail})\n`;
+            } else if (isMusholaCheck && musholaDetail) {
+                message += `Lokasi Area : ${location} (${musholaDetail})\n`;
+            } else {
+                message += `Lokasi Area : ${location}\n`;
+            }
+
+            message += `Petugas TSS : ${officer}\n\n`;
+            message += `Demikian Disampaikan, Terimakasih🙏🏻\n\n`;
+            message += `${unit}`;
+
+            const previewBox = document.getElementById('reportPreviewBox');
+            if (previewBox) {
+                previewBox.innerText = message;
+            }
+
+            return message;
+        }
+
+        // Location Selector Handler
+        function handleLocationChange() {
+            const select = document.getElementById('inputLocationSelect');
+            const customInput = document.getElementById('inputLocationCustom');
+            const hiddenLoc = document.getElementById('inputLocation');
+
+            if (select.value === 'custom') {
+                customInput.classList.remove('hidden');
+                hiddenLoc.value = customInput.value || 'Custom';
+            } else if (select.value === 'Toilet') {
+                customInput.classList.add('hidden');
+                hiddenLoc.value = 'Toilet';
+                if (currentPreset !== 'toilet') {
+                    loadFacilityPreset('toilet');
+                }
+            } else if (select.value === 'Mushola') {
+                customInput.classList.add('hidden');
+                hiddenLoc.value = 'Mushola';
+                if (currentPreset !== 'mushola') {
+                    loadFacilityPreset('mushola');
+                }
+            } else {
+                customInput.classList.add('hidden');
+                hiddenLoc.value = select.value;
+                if (currentPreset === 'toilet' || currentPreset === 'mushola') {
+                    loadFacilityPreset('general');
+                }
+            }
+
+            generateReportText();
+        }
+
+        function updateCustomLocation() {
+            const customInput = document.getElementById('inputLocationCustom');
+            document.getElementById('inputLocation').value = customInput.value || 'Custom';
+            generateReportText();
+        }
+
+        // Preset switcher
+        function loadFacilityPreset(presetType) {
+            triggerHaptic();
+            currentPreset = presetType;
+            const btnGen = document.getElementById('btnPresetGeneral');
+            const btnToi = document.getElementById('btnPresetToilet');
+            const btnMus = document.getElementById('btnPresetMushola');
+
+            if (btnGen) btnGen.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
+            if (btnToi) btnToi.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
+            if (btnMus) btnMus.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
+
+            if (presetType === 'toilet') {
+                facilities = JSON.parse(JSON.stringify(toiletPresetFacilities));
+                if (btnToi) btnToi.className = "text-xs px-2.5 py-1.5 bg-teal-600 text-white border border-teal-700 rounded-lg font-medium shadow-sm transition active:scale-95";
+            } else if (presetType === 'mushola') {
+                facilities = JSON.parse(JSON.stringify(musholaPresetFacilities));
+                if (btnMus) btnMus.className = "text-xs px-2.5 py-1.5 bg-emerald-600 text-white border border-emerald-700 rounded-lg font-medium shadow-sm transition active:scale-95";
+            } else {
+                facilities = JSON.parse(JSON.stringify(defaultFacilities));
+                if (btnGen) btnGen.className = "text-xs px-2.5 py-1.5 bg-blue-600 text-white border border-blue-700 rounded-lg font-medium shadow-sm transition active:scale-95";
+            }
+
+            renderFacilities();
+            generateReportText();
+        }
+
+        // Render facilities list UI
+        function renderFacilities() {
+            const container = document.getElementById('facilityContainer');
             if (!container) return;
-
-            if (masterType === 'ARRIVAL') {
-                container.innerHTML = `
-                    <button onclick="setStatusFilter('ALL')" data-tab="ALL" class="tab-btn px-3 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs">
-                        Semua <span id="badgeCountALL" class="ml-1 text-[10px] opacity-75">0</span>
-                    </button>
-                    <button onclick="setStatusFilter('LANDED')" data-tab="LANDED" class="tab-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                        Landed <span id="badgeCountLANDED" class="ml-1 text-[10px] opacity-75">0</span>
-                    </button>
-                    <button onclick="setStatusFilter('PUSHBACK')" data-tab="PUSHBACK" class="tab-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                        Pushback <span id="badgeCountPUSHBACK" class="ml-1 text-[10px] opacity-75">0</span>
-                    </button>
-                    <button onclick="setStatusFilter('SCHEDULED')" data-tab="SCHEDULED" class="tab-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                        Scheduled <span id="badgeCountSCHEDULED" class="ml-1 text-[10px] opacity-75">0</span>
-                    </button>
-                `;
-            } else {
-                container.innerHTML = `
-                    <button onclick="setStatusFilter('ALL')" data-tab="ALL" class="tab-btn px-3 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs">
-                        Semua <span id="badgeCountALL" class="ml-1 text-[10px] opacity-75">0</span>
-                    </button>
-                    <button onclick="setStatusFilter('OPEN')" data-tab="OPEN" class="tab-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                        Open <span id="badgeCountOPEN" class="ml-1 text-[10px] opacity-75">0</span>
-                    </button>
-                    <button onclick="setStatusFilter('BOARDING')" data-tab="BOARDING" class="tab-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                        Boarding <span id="badgeCountBOARDING" class="ml-1 text-[10px] opacity-75">0</span>
-                    </button>
-                    <button onclick="setStatusFilter('DEPARTED')" data-tab="DEPARTED" class="tab-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                        Departed <span id="badgeCountDEPARTED" class="ml-1 text-[10px] opacity-75">0</span>
-                    </button>
-                `;
-            }
-        }
-
-        function loadData(isSilent = false) {
-            const overlay = document.getElementById('loadingOverlay');
-            if (!isSilent && overlay) overlay.classList.remove('hidden', 'opacity-0');
-            
-            const fetchUrl = `${API_URL}?action=getAllFlightOpsData`;
-            fetch(fetchUrl)
-                .then(response => response.json())
-                .then(res => {
-                    onDataLoaded(res, isSilent);
-                })
-                .catch(err => {
-                    onDataLoadError(err, isSilent);
-                });
-        }
-
-        function onDataLoaded(res, isSilent) {
-            arrivalDataCache = res.arrival || [];
-            departureDataCache = res.departure || [];
-            renderFilterTabs();
-            applyFilteringAndSorting();
-            const overlay = document.getElementById('loadingOverlay');
-            if (!isSilent && overlay) overlay.classList.add('hidden');
-        }
-
-        function onDataLoadError(err, isSilent) {
-            if (!isSilent) {
-                showToast('Gagal Memuat', err.toString(), 'error');
-                const overlay = document.getElementById('loadingOverlay');
-                if (overlay) overlay.classList.add('hidden');
-            }
-        }
-
-        function calculateFlightStatus(item) {
-            if (masterType === 'ARRIVAL') {
-                const now = new Date();
-                const curMins = now.getHours() * 60 + now.getMinutes();
-                const aibtMins = timeToMinutes(item.aibt);
-
-                if (aibtMins !== -1) {
-                    if (curMins >= aibtMins + 50) {
-                        return { key: 'PUSHBACK', label: 'PUSHBACK', bg: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-300 dark:border-purple-800', dot: 'bg-purple-500', info: `Pushback (${curMins - aibtMins}m lalu)`, priority: 3 };
-                    }
-                    if (curMins >= aibtMins) {
-                        return { key: 'LANDED', label: 'LANDED', bg: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800', dot: 'bg-emerald-500', info: `AIBT ${item.aibt}`, priority: 2 };
-                    }
-                }
-                return { key: 'SCHEDULED', label: 'SCHEDULED', bg: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500 animate-pulse', info: 'Menunggu AIBT', priority: 1 };
-            } else {
-                const now = new Date();
-                const cur = now.getHours() * 60 + now.getMinutes();
-                const buka = timeToMinutes(item.jamBuka);
-                const tutup = timeToMinutes(item.jamTutup);
-                const departure = timeToMinutes(item.std);
-
-                if (buka !== -1 && tutup !== -1 && cur >= buka && cur <= tutup) {
-                    return { key: 'OPEN', label: 'OPEN', bg: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800', dot: 'bg-emerald-500 animate-pulse', info: `Tutup ${tutup - cur}m lagi`, priority: 1 };
-                }
-                if (tutup !== -1 && departure !== -1 && cur > tutup && cur <= departure) {
-                    return { key: 'BOARDING', label: 'BOARDING', bg: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-800', dot: 'bg-amber-500', info: `STD ${departure - cur}m lagi`, priority: 2 };
-                }
-                if (departure !== -1 && cur > departure) {
-                    return { key: 'DEPARTED', label: 'DEPARTED', bg: 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 opacity-60', dot: 'bg-slate-400', info: 'Berangkat', priority: 4 };
-                }
-                return { key: 'UPCOMING', label: 'UPCOMING', bg: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800', dot: 'bg-blue-500', info: `Buka ${item.jamBuka || '--:--'}`, priority: 3 };
-            }
-        }
-
-        function timeToMinutes(timeStr) {
-            if (!timeStr || !timeStr.includes(':')) return -1;
-            const parts = timeStr.split(':');
-            return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
-        }
-
-        function setStatusFilter(statusKey) {
-            activeStatusFilter = statusKey;
-            document.querySelectorAll('#statusFilterTabs button').forEach(btn => {
-                const tab = btn.getAttribute('data-tab');
-                if (tab === statusKey) {
-                    btn.className = "tab-btn px-3 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs";
-                } else {
-                    btn.className = "tab-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300";
-                }
-            });
-            applyFilteringAndSorting();
-        }
-
-        function handleSearch() {
-            const val = document.getElementById('searchInput').value.trim();
-            document.getElementById('clearSearchBtn').classList.toggle('hidden', val === '');
-            applyFilteringAndSorting();
-        }
-
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('clearSearchBtn').classList.add('hidden');
-            applyFilteringAndSorting();
-        }
-
-        function updateCounts() {
-            const currentList = masterType === 'ARRIVAL' ? arrivalDataCache : departureDataCache;
-            const counts = { ALL: currentList.length };
-            
-            if (masterType === 'ARRIVAL') {
-                counts.LANDED = 0; counts.PUSHBACK = 0; counts.SCHEDULED = 0;
-                currentList.forEach(item => {
-                    const st = calculateFlightStatus(item);
-                    if (counts[st.key] !== undefined) counts[st.key]++;
-                });
-                if (document.getElementById('badgeCountALL')) document.getElementById('badgeCountALL').innerText = counts.ALL;
-                if (document.getElementById('badgeCountLANDED')) document.getElementById('badgeCountLANDED').innerText = counts.LANDED;
-                if (document.getElementById('badgeCountPUSHBACK')) document.getElementById('badgeCountPUSHBACK').innerText = counts.PUSHBACK;
-                if (document.getElementById('badgeCountSCHEDULED')) document.getElementById('badgeCountSCHEDULED').innerText = counts.SCHEDULED;
-            } else {
-                counts.OPEN = 0; counts.BOARDING = 0; counts.DEPARTED = 0; counts.UPCOMING = 0;
-                currentList.forEach(item => {
-                    const st = calculateFlightStatus(item);
-                    if (counts[st.key] !== undefined) counts[st.key]++;
-                });
-                if (document.getElementById('badgeCountALL')) document.getElementById('badgeCountALL').innerText = counts.ALL;
-                if (document.getElementById('badgeCountOPEN')) document.getElementById('badgeCountOPEN').innerText = counts.OPEN;
-                if (document.getElementById('badgeCountBOARDING')) document.getElementById('badgeCountBOARDING').innerText = counts.BOARDING;
-                if (document.getElementById('badgeCountDEPARTED')) document.getElementById('badgeCountDEPARTED').innerText = counts.DEPARTED;
-            }
-        }
-
-        function applyFilteringAndSorting() {
-            updateCounts();
-            const currentList = masterType === 'ARRIVAL' ? arrivalDataCache : departureDataCache;
-            const term = document.getElementById('searchInput').value.toLowerCase().trim();
-            
-            filteredData = currentList.filter(item => {
-                const status = calculateFlightStatus(item);
-                if (activeStatusFilter !== 'ALL' && status.key !== activeStatusFilter) return false;
-                if (term !== '') {
-                    const str = masterType === 'ARRIVAL' 
-                        ? `${item.groundHandling} ${item.noFlight} ${item.origin} ${item.bcbNo} ${item.parkingStand}`.toLowerCase()
-                        : `${item.desk} ${item.maskapai} ${item.flightNo} ${item.dos} ${item.tipePesawat}`.toLowerCase();
-                    return str.includes(term);
-                }
-                return true;
-            });
-
-            filteredData.sort((a, b) => {
-                const stA = calculateFlightStatus(a);
-                const stB = calculateFlightStatus(b);
-                return stA.priority - stB.priority;
-            });
-
-            if (viewMode === 'PC') {
-                renderPcTable();
-            } else {
-                renderMobileCards();
-            }
-        }
-
-        function renderMobileCards() {
-            const container = document.getElementById('mobileCardList');
-            const emptyState = document.getElementById('emptyState');
-            if (!container || !emptyState) return;
             container.innerHTML = '';
 
-            if (filteredData.length === 0) {
-                emptyState.classList.remove('hidden');
-                if (document.getElementById('totalDataCount')) document.getElementById('totalDataCount').innerText = `0 penerbangan`;
-                return;
-            } else {
-                emptyState.classList.add('hidden');
+            facilities.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = "flex items-center justify-between bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 hover:border-slate-300 transition shadow-sm";
+                el.innerHTML = `
+                    <div class="flex items-center space-x-2 flex-grow pr-2">
+                        <span class="text-xs font-semibold text-slate-700">${item.name}</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="cycleFacilityStatus(${index})" class="px-3 py-1 rounded-xl text-sm bg-white border border-slate-200 shadow-sm hover:bg-slate-100 transition select-none active:scale-90" title="Klik untuk ubah status">
+                            ${item.status}
+                        </button>
+                        <button onclick="removeFacilityItem(${index})" class="text-slate-400 hover:text-rose-600 text-xs p-1 transition" title="Hapus item">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function cycleFacilityStatus(index) {
+            triggerHaptic();
+            const current = facilities[index].status;
+            const idx = statusOptions.indexOf(current);
+            const next = statusOptions[(idx + 1) % statusOptions.length];
+            facilities[index].status = next;
+            renderFacilities();
+            generateReportText();
+        }
+
+        function setAllFacilityStatus(status) {
+            triggerHaptic();
+            facilities.forEach(item => item.status = status);
+            renderFacilities();
+            generateReportText();
+        }
+
+        function removeFacilityItem(index) {
+            facilities.splice(index, 1);
+            renderFacilities();
+            generateReportText();
+        }
+
+        // Add facility modal
+        function openAddFacilityModal() {
+            triggerHaptic();
+            document.getElementById('modalAddFacility').classList.remove('hidden');
+            document.getElementById('newFacilityInput').value = '';
+            document.getElementById('newFacilityInput').focus();
+        }
+
+        function closeAddFacilityModal() {
+            document.getElementById('modalAddFacility').classList.add('hidden');
+        }
+
+        function confirmAddFacility() {
+            const val = document.getElementById('newFacilityInput').value.trim();
+            if (val) {
+                facilities.push({
+                    id: 'f_custom_' + Date.now(),
+                    name: val,
+                    status: '✅'
+                });
+                renderFacilities();
+                generateReportText();
+                closeAddFacilityModal();
+            }
+        }
+
+        // Dynamic Notes management
+        function renderNotes() {
+            const container = document.getElementById('notesContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (notes.length === 0) {
+                notes.push('');
             }
 
-            filteredData.forEach(row => {
-                const status = calculateFlightStatus(row);
-                const card = document.createElement('div');
-                card.className = "bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-3.5 shadow-xs transition-all active:scale-[0.99] w-full";
-                card.onclick = () => toggleCardDetail(row.id);
+            notes.forEach((note, idx) => {
+                const item = document.createElement('div');
+                item.className = "flex items-center space-x-2";
+                item.innerHTML = `
+                    <div class="relative flex-grow">
+                        <input type="text" value="${note}" oninput="updateNoteValue(${idx}, this.value)" placeholder="Tuliskan catatan kendala..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+                    <button onclick="removeNoteField(${idx})" class="text-slate-400 hover:text-rose-600 text-xs p-2 transition">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+        }
 
-                if (masterType === 'ARRIVAL') {
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                            <div class="flex items-center gap-1.5 min-w-0">
-                                <span class="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded font-bold text-[11px] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">${row.groundHandling || '-'}</span>
-                                <span class="font-mono font-bold text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded border border-blue-100 dark:border-blue-900/50">${row.noFlight || '-'}</span>
-                            </div>
-                            <span class="px-2.5 py-0.5 rounded-full border text-[9px] font-bold uppercase flex items-center gap-1 flex-shrink-0 ${status.bg}">
-                                <span class="w-1.5 h-1.5 rounded-full ${status.dot}"></span>
-                                ${status.label}
-                            </span>
-                        </div>
-                        <div class="flex items-center justify-between pt-2.5">
-                            <div class="min-w-0 pr-2">
-                                <h4 class="text-xs font-bold text-slate-900 dark:text-white truncate">Asal: <span class="font-mono">${row.origin || '-'}</span></h4>
-                                <p class="text-[10px] text-slate-400 font-medium mt-0.5 truncate">Stand: <span class="font-mono font-bold text-slate-700 dark:text-slate-300">${row.parkingStand || '-'}</span></p>
-                            </div>
-                            <div class="text-right flex-shrink-0">
-                                <span class="text-[9px] font-bold text-slate-400 uppercase block">AIBT</span>
-                                <span class="font-mono font-extrabold text-sm text-slate-900 dark:text-white">${row.aibt || '--:--'}</span>
-                            </div>
-                        </div>
-                        <div id="card-detail-${row.id}" class="hidden mt-2.5 pt-2.5 border-t border-slate-100 dark:border-slate-800 space-y-2.5 animate-fade">
-                            <div class="grid grid-cols-2 gap-2 text-[11px]">
-                                <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200/60 dark:border-slate-800">
-                                    <span class="text-[9px] text-slate-400 font-bold uppercase block">BCB No</span>
-                                    <span class="font-mono font-bold text-slate-800 dark:text-slate-200 mt-0.5 block truncate">${row.bcbNo || '-'}</span>
-                                </div>
-                                <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200/60 dark:border-slate-800">
-                                    <span class="text-[9px] text-slate-400 font-bold uppercase block">Parking Stand</span>
-                                    <span class="font-mono font-bold text-slate-800 dark:text-slate-200 mt-0.5 block truncate">${row.parkingStand || '-'}</span>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2 pt-1">
-                                <button onclick="event.stopPropagation(); openModal(${row.id})" class="flex-1 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-xs">
-                                    <i class="fa-solid fa-pen-to-square text-[10px]"></i> Edit
-                                </button>
-                                <button onclick="event.stopPropagation(); confirmDeleteFlight(${row.id}, '${row.noFlight}')" class="py-2.5 px-4 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-xs">
-                                    <i class="fa-solid fa-trash-can text-[10px]"></i> Hapus
-                                </button>
-                            </div>
-                        </div>
+        function addNoteField() {
+            notes.push('');
+            renderNotes();
+        }
+
+        function updateNoteValue(index, val) {
+            notes[index] = val;
+            generateReportText();
+        }
+
+        function removeNoteField(index) {
+            notes.splice(index, 1);
+            renderNotes();
+            generateReportText();
+        }
+
+        // Trigger File Input safely
+        function triggerFileInput(id) {
+            triggerHaptic();
+            const el = document.getElementById(id);
+            if (el) el.click();
+        }
+
+        // Photo upload & compression handler
+        function handleImageUpload(event) {
+            const files = Array.from(event.target.files);
+            if (!files.length) return;
+
+            if (uploadedPhotos.length + files.length > 10) {
+                showToast("Maksimal 10 foto per laporan", "error");
+                return;
+            }
+
+            files.forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDim = 800;
+
+                        if (width > height && width > maxDim) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        } else if (height > maxDim) {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        const base64 = canvas.toDataURL('image/jpeg', 0.7);
+
+                        canvas.toBlob((blob) => {
+                            const newFile = new File([blob], file.name || `foto_tss_${Date.now()}.jpg`, { type: 'image/jpeg' });
+                            uploadedPhotos.push({
+                                id: 'photo_' + Date.now() + '_' + Math.random().toString(36).substring(2, 5),
+                                file: newFile,
+                                base64: base64
+                            });
+                            renderPhotoPreviews();
+                            generateReportText();
+                        }, 'image/jpeg', 0.7);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+
+            event.target.value = '';
+        }
+
+        function renderPhotoPreviews() {
+            const container = document.getElementById('photoPreviewGrid');
+            const photoCount = document.getElementById('photoCount');
+            const btnClearPhotos = document.getElementById('btnClearPhotos');
+            const previewContainer = document.getElementById('previewPhotosContainer');
+
+            if (photoCount) photoCount.innerText = uploadedPhotos.length;
+            if (btnClearPhotos) {
+                if (uploadedPhotos.length > 0) btnClearPhotos.classList.remove('hidden');
+                else btnClearPhotos.classList.add('hidden');
+            }
+
+            if (container) {
+                container.innerHTML = '';
+                uploadedPhotos.forEach((photo) => {
+                    const item = document.createElement('div');
+                    item.className = "relative group rounded-xl overflow-hidden border border-slate-200 aspect-square bg-slate-100 shadow-sm";
+                    item.innerHTML = `
+                        <img src="${photo.base64}" class="w-full h-full object-cover" alt="Foto Laporan">
+                        <button onclick="removePhoto('${photo.id}')" class="absolute top-1 right-1 bg-rose-600 hover:bg-rose-700 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] transition shadow">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
                     `;
+                    container.appendChild(item);
+                });
+            }
+
+            if (previewContainer) {
+                if (uploadedPhotos.length === 0) {
+                    previewContainer.classList.add('hidden');
+                    previewContainer.innerHTML = '';
                 } else {
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                            <div class="flex items-center gap-1.5 min-w-0">
-                                <span class="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded font-mono text-[11px] font-bold text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">${row.desk || '-'}</span>
-                                <span class="font-mono font-bold text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded border border-blue-100 dark:border-blue-900/50">${row.flightNo || '-'}</span>
-                            </div>
-                            <span class="px-2.5 py-0.5 rounded-full border text-[9px] font-bold uppercase flex items-center gap-1 flex-shrink-0 ${status.bg}">
-                                <span class="w-1.5 h-1.5 rounded-full ${status.dot}"></span>
-                                ${status.label}
-                            </span>
+                    previewContainer.classList.remove('hidden');
+                    previewContainer.innerHTML = `
+                        <div class="text-[11px] font-semibold text-slate-600 mb-1.5 flex items-center gap-1">
+                            <i class="fa-solid fa-paperclip text-slate-400"></i> Lampiran Foto (${uploadedPhotos.length}):
                         </div>
-                        <div class="flex items-center justify-between pt-2.5">
-                            <div class="min-w-0 pr-2">
-                                <h4 class="text-xs font-bold text-slate-900 dark:text-white truncate">${row.maskapai || '-'}</h4>
-                                <p class="text-[10px] text-slate-400 font-medium mt-0.5 truncate">${status.info}</p>
-                            </div>
-                            <div class="text-right flex-shrink-0">
-                                <span class="text-[9px] font-bold text-slate-400 uppercase block">STD</span>
-                                <span class="font-mono font-extrabold text-sm text-slate-900 dark:text-white">${row.std || '--:--'}</span>
-                            </div>
-                        </div>
-                        <div id="card-detail-${row.id}" class="hidden mt-2.5 pt-2.5 border-t border-slate-100 dark:border-slate-800 space-y-2.5 animate-fade">
-                            <div class="grid grid-cols-2 gap-2 text-[11px]">
-                                <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200/60 dark:border-slate-800">
-                                    <span class="text-[9px] text-slate-400 font-bold uppercase block">Rute / DOS</span>
-                                    <span class="font-mono font-bold text-slate-800 dark:text-slate-200 mt-0.5 block truncate">${row.dos || '-'}</span>
-                                </div>
-                                <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200/60 dark:border-slate-800">
-                                    <span class="text-[9px] text-slate-400 font-bold uppercase block">Tipe Pesawat</span>
-                                    <span class="font-semibold text-slate-800 dark:text-slate-200 truncate block">${row.tipePesawat || '-'}</span>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2 pt-1">
-                                <button onclick="event.stopPropagation(); openModal(${row.id})" class="flex-1 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-xs">
-                                    <i class="fa-solid fa-pen-to-square text-[10px]"></i> Edit
-                                </button>
-                                <button onclick="event.stopPropagation(); confirmDeleteFlight(${row.id}, '${row.flightNo}')" class="py-2.5 px-4 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-xs">
-                                    <i class="fa-solid fa-trash-can text-[10px]"></i> Hapus
-                                </button>
-                            </div>
+                        <div class="grid grid-cols-3 gap-1.5">
+                            ${uploadedPhotos.map(p => `
+                                <img src="${p.base64}" class="w-full h-14 object-cover rounded-lg border border-emerald-200 shadow-sm">
+                            `).join('')}
                         </div>
                     `;
                 }
+            }
+        }
 
+        function removePhoto(id) {
+            uploadedPhotos = uploadedPhotos.filter(p => p.id !== id);
+            renderPhotoPreviews();
+            generateReportText();
+        }
+
+        function clearAllPhotos() {
+            uploadedPhotos = [];
+            renderPhotoPreviews();
+            generateReportText();
+        }
+
+        // Web Share API Integration
+        async function shareReportWithPhotos() {
+            triggerHaptic();
+            const reportText = generateReportText();
+            const filesArray = uploadedPhotos.map(p => p.file);
+
+            if (navigator.canShare && filesArray.length > 0 && navigator.canShare({ files: filesArray })) {
+                try {
+                    await navigator.share({
+                        title: 'Laporan Operasional TSS',
+                        text: reportText,
+                        files: filesArray
+                    });
+                    showToast("Laporan & foto berhasil dibagikan!", "success");
+                    return;
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        console.warn('Web Share File error:', err);
+                    } else {
+                        return;
+                    }
+                }
+            }
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'Laporan Operasional TSS',
+                        text: reportText
+                    });
+                    if (filesArray.length > 0) {
+                        showToast("Teks dibagikan. Lampirkan foto manual dari galeri.", "info");
+                    } else {
+                        showToast("Laporan berhasil dibagikan!", "success");
+                    }
+                    return;
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                }
+            }
+
+            copyReportText();
+            if (filesArray.length > 0) {
+                showToast("Teks disalin! Upload foto tidak didukung otomatis browser ini.", "info");
+            }
+        }
+
+        function copyReportText() {
+            triggerHaptic();
+            const reportText = generateReportText();
+            const tempArea = document.createElement('textarea');
+            tempArea.value = reportText;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempArea);
+            showToast("Teks laporan berhasil disalin!", "success");
+        }
+
+        // Local Storage History
+        function loadHistoryFromStorage() {
+            try {
+                const stored = localStorage.getItem('tss_report_history');
+                if (stored) {
+                    reportHistory = JSON.parse(stored);
+                } else {
+                    reportHistory = [];
+                }
+            } catch (e) {
+                console.error('Error loading history:', e);
+                reportHistory = [];
+            }
+            updateHistoryBadgeCount();
+        }
+
+        function saveHistoryToStorage() {
+            try {
+                localStorage.setItem('tss_report_history', JSON.stringify(reportHistory));
+            } catch (e) {
+                console.error('Error saving history:', e);
+            }
+        }
+
+        function updateHistoryBadgeCount() {
+            const badge = document.getElementById('mbBadgeHistory');
+            if (badge) {
+                if (reportHistory.length > 0) {
+                    badge.innerText = reportHistory.length;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        }
+
+        function saveReportToHistory() {
+            triggerHaptic();
+            const reportContent = generateReportText();
+            const location = document.getElementById('inputLocation').value;
+            const officer = document.getElementById('inputOfficer').value;
+            const dateFormatted = getFormattedIndonesianDate(document.getElementById('inputDate').value);
+
+            const record = {
+                id: 'rep_' + Date.now(),
+                timestamp: new Date().toLocaleString('id-ID'),
+                location: location,
+                officer: officer,
+                date: dateFormatted,
+                content: reportContent,
+                photos: uploadedPhotos.map(p => p.base64)
+            };
+
+            reportHistory.unshift(record);
+            saveHistoryToStorage();
+            updateHistoryBadgeCount();
+            showToast("Disimpan ke Riwayat App!", "success");
+        }
+
+        function renderHistoryList(filterText = '') {
+            const container = document.getElementById('historyListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const filtered = reportHistory.filter(item => {
+                const search = filterText.toLowerCase();
+                return item.location.toLowerCase().includes(search) ||
+                       item.officer.toLowerCase().includes(search) ||
+                       item.content.toLowerCase().includes(search);
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400">
+                        <i class="fa-solid fa-folder-open text-3xl mb-2"></i>
+                        <p class="text-xs">Belum ada riwayat laporan tersimpan.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 border border-slate-200 rounded-2xl p-3.5 sm:p-4 transition hover:shadow-md space-y-2";
+                
+                const photosHTML = (item.photos && item.photos.length > 0) ? `
+                    <div class="pt-1">
+                        <span class="text-[10px] font-semibold text-slate-500 block mb-1">Lampiran Foto (${item.photos.length}):</span>
+                        <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                            ${item.photos.map(p => `<img src="${p}" class="w-12 h-12 object-cover rounded-lg border border-slate-200 flex-shrink-0 shadow-sm">`).join('')}
+                        </div>
+                    </div>
+                ` : '';
+
+                card.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between border-b border-slate-200/80 pb-2 text-xs">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold text-slate-800"><i class="fa-solid fa-location-dot text-blue-600 mr-1"></i>${item.location}</span>
+                            <span class="text-slate-400">•</span>
+                            <span class="text-slate-600"><i class="fa-solid fa-user-gear mr-1"></i>${item.officer || '-'}</span>
+                        </div>
+                        <span class="text-[10px] font-mono text-slate-400">${item.timestamp}</span>
+                    </div>
+                    <pre class="font-mono text-xs text-slate-700 whitespace-pre-wrap bg-white p-3 rounded-xl border border-slate-100 max-h-40 overflow-y-auto leading-relaxed">${item.content}</pre>
+                    ${photosHTML}
+                    <div class="flex justify-end space-x-2 pt-1">
+                        <button onclick="copySingleHistory('${item.id}')" class="px-3 py-1.5 text-xs bg-emerald-50 text-emerald-700 rounded-xl font-semibold hover:bg-emerald-100 transition flex items-center gap-1 active:scale-95">
+                            <i class="fa-regular fa-copy"></i> Salin
+                        </button>
+                        <button onclick="deleteSingleHistory('${item.id}')" class="px-3 py-1.5 text-xs bg-rose-50 text-rose-600 rounded-xl font-semibold hover:bg-rose-100 transition flex items-center gap-1 active:scale-95">
+                            <i class="fa-solid fa-trash"></i> Hapus
+                        </button>
+                    </div>
+                `;
                 container.appendChild(card);
             });
-
-            if (document.getElementById('totalDataCount')) {
-                document.getElementById('totalDataCount').innerText = `${filteredData.length} penerbangan`;
-            }
         }
 
-        function renderPcTable() {
-            const thead = document.getElementById('pcTableHead');
-            const tbody = document.getElementById('pcTableBody');
-            const emptyState = document.getElementById('emptyState');
-            if (!thead || !tbody || !emptyState) return;
-
-            tbody.innerHTML = '';
-
-            if (filteredData.length === 0) {
-                emptyState.classList.remove('hidden');
-                if (document.getElementById('totalDataCount')) document.getElementById('totalDataCount').innerText = `0 penerbangan`;
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            if (masterType === 'ARRIVAL') {
-                thead.innerHTML = `
-                    <tr>
-                        <th class="py-3 px-4">Ground Handling</th>
-                        <th class="py-3 px-4">No Flight</th>
-                        <th class="py-3 px-4">Asal (Origin)</th>
-                        <th class="py-3 px-4">BCB No</th>
-                        <th class="py-3 px-4">Parking Stand</th>
-                        <th class="py-3 px-4 text-center">AIBT</th>
-                        <th class="py-3 px-4 text-center">Status</th>
-                        <th class="py-3 px-4 text-right">Aksi</th>
-                    </tr>
-                `;
-
-                filteredData.forEach(row => {
-                    const status = calculateFlightStatus(row);
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800/50";
-                    tr.innerHTML = `
-                        <td class="py-3 px-4 font-bold text-slate-800 dark:text-slate-200">${row.groundHandling || '-'}</td>
-                        <td class="py-3 px-4 font-mono font-bold text-blue-600 dark:text-blue-400">${row.noFlight || '-'}</td>
-                        <td class="py-3 px-4 font-mono font-semibold">${row.origin || '-'}</td>
-                        <td class="py-3 px-4 font-mono text-slate-600 dark:text-slate-400">${row.bcbNo || '-'}</td>
-                        <td class="py-3 px-4 font-mono font-bold">${row.parkingStand || '-'}</td>
-                        <td class="py-3 px-4 text-center font-mono font-extrabold text-slate-900 dark:text-white">${row.aibt || '--:--'}</td>
-                        <td class="py-3 px-4 text-center">
-                            <span class="px-2.5 py-0.5 rounded-full border text-[10px] font-bold uppercase inline-flex items-center gap-1 ${status.bg}">
-                                <span class="w-1.5 h-1.5 rounded-full ${status.dot}"></span>
-                                ${status.label}
-                            </span>
-                        </td>
-                        <td class="py-3 px-4 text-right">
-                            <div class="flex items-center justify-end gap-1.5">
-                                <button onclick="openModal(${row.id})" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold">Edit</button>
-                                <button onclick="confirmDeleteFlight(${row.id}, '${row.noFlight}')" class="px-2.5 py-1 bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 rounded-lg text-xs font-semibold">Hapus</button>
-                            </div>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            } else {
-                thead.innerHTML = `
-                    <tr>
-                        <th class="py-3 px-4">Desk Counter</th>
-                        <th class="py-3 px-4">Flight & Maskapai</th>
-                        <th class="py-3 px-4">Rute / DOS</th>
-                        <th class="py-3 px-4">Tipe Pesawat</th>
-                        <th class="py-3 px-4 text-center">STD</th>
-                        <th class="py-3 px-4 text-center">Status Counter</th>
-                        <th class="py-3 px-4 text-right">Aksi</th>
-                    </tr>
-                `;
-
-                filteredData.forEach(row => {
-                    const status = calculateFlightStatus(row);
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800/50";
-                    tr.innerHTML = `
-                        <td class="py-3 px-4 font-mono font-bold text-slate-800 dark:text-slate-200">
-                            <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700">${row.desk || '-'}</span>
-                        </td>
-                        <td class="py-3 px-4">
-                            <div class="font-bold text-slate-900 dark:text-white">${row.maskapai || '-'}</div>
-                            <div class="font-mono text-[11px] text-blue-600 dark:text-blue-400 font-bold">${row.flightNo || '-'}</div>
-                        </td>
-                        <td class="py-3 px-4 font-mono text-slate-600 dark:text-slate-400">${row.dos || '-'}</td>
-                        <td class="py-3 px-4 font-semibold">${row.tipePesawat || '-'}</td>
-                        <td class="py-3 px-4 text-center font-mono font-extrabold text-slate-900 dark:text-white">${row.std || '--:--'}</td>
-                        <td class="py-3 px-4 text-center">
-                            <span class="px-2.5 py-0.5 rounded-full border text-[10px] font-bold uppercase inline-flex items-center gap-1 ${status.bg}">
-                                <span class="w-1.5 h-1.5 rounded-full ${status.dot}"></span>
-                                ${status.label}
-                            </span>
-                        </td>
-                        <td class="py-3 px-4 text-right">
-                            <div class="flex items-center justify-end gap-1.5">
-                                <button onclick="openModal(${row.id})" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold">Edit</button>
-                                <button onclick="confirmDeleteFlight(${row.id}, '${row.flightNo}')" class="px-2.5 py-1 bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 rounded-lg text-xs font-semibold">Hapus</button>
-                            </div>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-
-            if (document.getElementById('totalDataCount')) {
-                document.getElementById('totalDataCount').innerText = `${filteredData.length} penerbangan`;
-            }
+        function filterHistoryList() {
+            const text = document.getElementById('historySearchInput').value;
+            renderHistoryList(text);
         }
 
-        function toggleCardDetail(id) {
-            const detail = document.getElementById(`card-detail-${id}`);
-            if (detail) detail.classList.toggle('hidden');
+        function copySingleHistory(id) {
+            triggerHaptic();
+            const item = reportHistory.find(r => r.id === id);
+            if (!item) return;
+
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = item.content;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempTextArea);
+            showToast("Teks riwayat disalin!", "success");
         }
 
-        function openModal(id = null) {
-            const form = document.getElementById('flightForm');
-            if (form) form.reset();
-            const recordIdEl = document.getElementById('recordId');
-            if (recordIdEl) recordIdEl.value = '';
+        function deleteSingleHistory(id) {
+            triggerHaptic();
+            reportHistory = reportHistory.filter(r => r.id !== id);
+            saveHistoryToStorage();
+            updateHistoryBadgeCount();
+            renderHistoryList(document.getElementById('historySearchInput').value);
+            showToast("Riwayat dihapus", "info");
+        }
+
+        function clearAllHistory() {
+            triggerHaptic();
+            if (reportHistory.length === 0) return;
+            reportHistory = [];
+            saveHistoryToStorage();
+            updateHistoryBadgeCount();
+            renderHistoryList();
+            showToast("Semua riwayat telah dibersihkan", "info");
+        }
+
+        function resetForm() {
+            triggerHaptic();
+            isGreetingManuallySet = false;
+            setAutomaticGreeting(true);
+
+            document.getElementById('inputAreaStatus').value = 'landai';
             
-            const headerLabel = document.getElementById('modalHeaderLabel');
-            const dynamicFields = document.getElementById('dynamicFormFields');
-            const currentList = masterType === 'ARRIVAL' ? arrivalDataCache : departureDataCache;
-            const record = id !== null ? currentList.find(r => r.id === id) : null;
+            document.getElementById('inputLocationSelect').value = 'Checkin';
+            const customInput = document.getElementById('inputLocationCustom');
+            customInput.classList.add('hidden');
+            customInput.value = '';
+            document.getElementById('inputLocation').value = 'Checkin';
 
-            if (masterType === 'ARRIVAL') {
-                if (headerLabel) headerLabel.innerText = record ? 'Edit Kedatangan' : 'Entri Kedatangan Baru';
-                dynamicFields.innerHTML = `
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Ground Handling</label>
-                            <input type="text" id="arr-groundHandling" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="GAPURA">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">No Flight</label>
-                            <input type="text" id="arr-noFlight" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-mono font-bold text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="GA 183">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Origin (Asal)</label>
-                            <input type="text" id="arr-origin" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-mono font-bold text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="KNO">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">BCB No</label>
-                            <input type="text" id="arr-bcbNo" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-mono font-bold text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="BCB-001">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Parking Stand</label>
-                            <input type="text" id="arr-parkingStand" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-mono font-bold text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="B3">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">AIBT (Aktual Datang)</label>
-                            <input type="text" id="arr-aibt" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-mono font-bold text-center text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="14:20">
-                        </div>
-                    </div>
-                `;
+            const toiletDetailInput = document.getElementById('inputToiletDetail');
+            if (toiletDetailInput) toiletDetailInput.value = '';
+            document.getElementById('toiletDetailContainer').classList.add('hidden');
 
-                if (record) {
-                    document.getElementById('recordId').value = record.id;
-                    document.getElementById('arr-groundHandling').value = record.groundHandling || '';
-                    document.getElementById('arr-noFlight').value = record.noFlight || '';
-                    document.getElementById('arr-origin').value = record.origin || '';
-                    document.getElementById('arr-bcbNo').value = record.bcbNo || '';
-                    document.getElementById('arr-parkingStand').value = record.parkingStand || '';
-                    document.getElementById('arr-aibt').value = record.aibt || '';
-                }
-            } else {
-                if (headerLabel) headerLabel.innerText = record ? 'Edit Keberangkatan' : 'Entri Keberangkatan Baru';
-                dynamicFields.innerHTML = `
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Desk Counter</label>
-                            <input type="text" id="dep-desk" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="D10">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Flight No</label>
-                            <input type="text" id="dep-flightNo" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-mono font-bold text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="GA 182">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Maskapai</label>
-                        <input type="text" id="dep-maskapai" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="Garuda Indonesia">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Rute / DOS</label>
-                            <input type="text" id="dep-dos" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-mono font-bold text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="CGK-KNO">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Tipe Pesawat</label>
-                            <input type="text" id="dep-tipePesawat" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-800 dark:text-white outline-none focus:border-blue-500" placeholder="B738">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <div>
-                            <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1 text-center">STD</label>
-                            <input type="text" id="dep-std" oninput="autoCalculateTimes()" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 text-xs font-mono font-bold text-center text-slate-900 dark:text-white outline-none focus:border-blue-500" placeholder="06:45">
-                        </div>
-                        <div>
-                            <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1 text-center">Buka (-3j)</label>
-                            <input type="text" id="dep-jamBuka" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 text-xs font-mono font-bold text-center text-slate-900 dark:text-white outline-none focus:border-blue-500" placeholder="03:45">
-                        </div>
-                        <div>
-                            <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1 text-center">Tutup (-40m)</label>
-                            <input type="text" id="dep-jamTutup" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl py-2.5 text-xs font-mono font-bold text-center text-slate-900 dark:text-white outline-none focus:border-blue-500" placeholder="06:05">
-                        </div>
-                    </div>
-                `;
+            const musholaDetailInput = document.getElementById('inputMusholaDetail');
+            if (musholaDetailInput) musholaDetailInput.value = '';
+            document.getElementById('musholaDetailContainer').classList.add('hidden');
 
-                if (record) {
-                    document.getElementById('recordId').value = record.id;
-                    document.getElementById('dep-desk').value = record.desk || '';
-                    document.getElementById('dep-flightNo').value = record.flightNo || '';
-                    document.getElementById('dep-maskapai').value = record.maskapai || '';
-                    document.getElementById('dep-dos').value = record.dos || '';
-                    document.getElementById('dep-tipePesawat').value = record.tipePesawat || '';
-                    document.getElementById('dep-std').value = record.std || '';
-                    document.getElementById('dep-jamBuka').value = record.jamBuka || '';
-                    document.getElementById('dep-jamTutup').value = record.jamTutup || '';
-                }
-            }
-
-            const backdrop = document.getElementById('modalBackdrop');
-            const modal = document.getElementById('formModal');
-            if (backdrop && modal) {
-                backdrop.classList.remove('hidden');
-                modal.classList.remove('hidden');
-                void modal.offsetWidth;
-                backdrop.classList.remove('opacity-0');
-            }
-        }
-
-        function autoCalculateTimes() {
-            const stdInput = document.getElementById('dep-std');
-            if (!stdInput) return;
-            const stdVal = stdInput.value.trim();
-            if (!stdVal.match(/^\d{2}:\d{2}$/)) return;
-
-            const [hrs, mins] = stdVal.split(':').map(Number);
-            const stdTotalMins = hrs * 60 + mins;
-
-            const bukaMins = (stdTotalMins - 180 + 1440) % 1440;
-            const tutupMins = (stdTotalMins - 40 + 1440) % 1440;
-
-            const formatTime = (total) => {
-                const h = String(Math.floor(total / 60)).padStart(2, '0');
-                const m = String(total % 60).padStart(2, '0');
-                return `${h}:${m}`;
-            };
-
-            const bukaInput = document.getElementById('dep-jamBuka');
-            const tutupInput = document.getElementById('dep-jamTutup');
-            if (bukaInput) bukaInput.value = formatTime(bukaMins);
-            if (tutupInput) tutupInput.value = formatTime(tutupMins);
-        }
-
-        function closeModal() {
-            const backdrop = document.getElementById('modalBackdrop');
-            const modal = document.getElementById('formModal');
-            if (!backdrop || !modal) return;
-            backdrop.classList.add('opacity-0');
+            document.getElementById('inputOfficer').value = '';
+            document.getElementById('inputUnit').value = 'TSS T3 Internasional';
             
-            setTimeout(() => {
-                backdrop.classList.add('hidden');
-                modal.classList.add('hidden');
-            }, 250);
+            loadFacilityPreset('general');
+            notes = [''];
+            clearAllPhotos();
+
+            renderFacilities();
+            renderNotes();
+            generateReportText();
+            showToast("Formulir telah di-reset", "info");
         }
 
-        let pendingDeleteId = null;
-
-        function confirmDeleteFlight(id, flightNo) {
-            pendingDeleteId = id;
-            const target = document.getElementById('deleteFlightNoTarget');
-            if (target) target.innerText = flightNo || 'ini';
-            
-            const backdrop = document.getElementById('deleteModalBackdrop');
-            const modal = document.getElementById('deleteModal');
-            if (backdrop && modal) {
-                backdrop.classList.remove('hidden');
-                modal.classList.remove('hidden');
-                void modal.offsetWidth;
-                backdrop.classList.remove('opacity-0');
-            }
-        }
-
-        function closeDeleteModal() {
-            const backdrop = document.getElementById('deleteModalBackdrop');
-            if (!backdrop) return;
-            backdrop.classList.add('opacity-0');
-            
-            setTimeout(() => {
-                backdrop.classList.add('hidden');
-                const modal = document.getElementById('deleteModal');
-                if (modal) modal.classList.add('hidden');
-                pendingDeleteId = null;
-            }, 200);
-        }
-
-        function executeDeleteFlight() {
-            if (!pendingDeleteId) return;
-
-            const btnConfirm = document.getElementById('btnConfirmDelete');
-            const btnText = document.getElementById('btnDeleteText');
-            const spinner = document.getElementById('btnDeleteSpinner');
-
-            if (btnConfirm) btnConfirm.disabled = true;
-            if (btnText) btnText.innerText = 'Menghapus...';
-            if (spinner) spinner.classList.remove('hidden');
-
-            const payload = { action: 'deleteFlightData', type: masterType, id: pendingDeleteId };
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(res => {
-                resetDeleteState();
-                closeDeleteModal();
-                showToast('Terhapus', res.message || 'Data berhasil dihapus.', 'success');
-                playChime('success');
-                loadData();
-            })
-            .catch(err => {
-                resetDeleteState();
-                closeDeleteModal();
-                showToast('Gagal', err.toString(), 'error');
-                playChime('error');
-            });
-
-            function resetDeleteState() {
-                if (btnConfirm) btnConfirm.disabled = false;
-                if (btnText) btnText.innerText = 'Hapus';
-                if (spinner) spinner.classList.add('hidden');
-            }
-        }
-
-        function saveData() {
-            let record = { 
-                action: 'saveFlightData',
-                type: masterType,
-                id: document.getElementById('recordId').value 
-            };
-
-            if (masterType === 'ARRIVAL') {
-                record.groundHandling = document.getElementById('arr-groundHandling').value.trim().toUpperCase();
-                record.noFlight = document.getElementById('arr-noFlight').value.trim().toUpperCase();
-                record.origin = document.getElementById('arr-origin').value.trim().toUpperCase();
-                record.bcbNo = document.getElementById('arr-bcbNo').value.trim().toUpperCase();
-                record.parkingStand = document.getElementById('arr-parkingStand').value.trim().toUpperCase();
-                record.aibt = document.getElementById('arr-aibt').value.trim();
-            } else {
-                record.desk = document.getElementById('dep-desk').value.trim();
-                record.flightNo = document.getElementById('dep-flightNo').value.trim().toUpperCase();
-                record.maskapai = document.getElementById('dep-maskapai').value.trim();
-                record.dos = document.getElementById('dep-dos').value.trim().toUpperCase();
-                record.tipePesawat = document.getElementById('dep-tipePesawat').value.trim();
-                record.std = document.getElementById('dep-std').value.trim();
-                record.jamBuka = document.getElementById('dep-jamBuka').value.trim();
-                record.jamTutup = document.getElementById('dep-jamTutup').value.trim();
-            }
-
-            const btnSave = document.getElementById('btnSave');
-            const btnText = document.getElementById('btnSaveText');
-            const spinner = document.getElementById('btnSaveSpinner');
-
-            if (btnSave) btnSave.disabled = true;
-            if (btnText) btnText.innerText = 'Menyimpan...';
-            if (spinner) spinner.classList.remove('hidden');
-
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify(record)
-            })
-            .then(res => res.json())
-            .then(res => {
-                resetSave();
-                closeModal();
-                showToast('Tersimpan', res.message || 'Data berhasil disimpan.', 'success');
-                playChime('success');
-                loadData();
-            })
-            .catch(err => {
-                resetSave();
-                showToast('Gagal', err.toString(), 'error');
-                playChime('error');
-            });
-
-            function resetSave() {
-                if (btnSave) btnSave.disabled = false;
-                if (btnText) btnText.innerText = 'Simpan Data';
-                if (spinner) spinner.classList.add('hidden');
-            }
-        }
-
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-            const icon = document.getElementById('themeIcon');
-            if (icon) {
-                icon.className = document.documentElement.classList.contains('dark') ? "fa-solid fa-sun text-amber-400" : "fa-solid fa-moon";
-            }
-        }
-
-        let toastTimer;
-        function showToast(title, message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const iconBox = document.getElementById('toastIcon');
-            const progressBar = document.getElementById('toastProgressBar');
-            const titleEl = document.getElementById('toastTitle');
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toastNotification');
             const msgEl = document.getElementById('toastMessage');
+            const iconEl = document.getElementById('toastIcon');
 
-            if (!toast || !iconBox || !progressBar || !titleEl || !msgEl) return;
+            if (!toast || !msgEl || !iconEl) return;
 
-            titleEl.innerText = title;
             msgEl.innerText = message;
-
-            clearTimeout(toastTimer);
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            progressBar.classList.remove('animate-toast-bar');
-            void progressBar.offsetWidth;
-
-            if (type === 'success') {
-                iconBox.innerHTML = '<i class="fa-solid fa-check"></i>';
-                iconBox.className = "flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-white bg-emerald-500 text-xs";
-                progressBar.className = "absolute bottom-0 left-0 h-0.5 bg-emerald-500 animate-toast-bar";
-            } else if (type === 'error') {
-                iconBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
-                iconBox.className = "flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-white bg-rose-500 text-xs";
-                progressBar.className = "absolute bottom-0 left-0 h-0.5 bg-rose-500 animate-toast-bar";
+            
+            if (type === 'error') {
+                iconEl.className = "fa-solid fa-circle-exclamation text-rose-400 text-base";
+            } else if (type === 'info') {
+                iconEl.className = "fa-solid fa-circle-info text-blue-400 text-base";
             } else {
-                iconBox.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
-                iconBox.className = "flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-white bg-blue-500 text-xs";
-                progressBar.className = "absolute bottom-0 left-0 h-0.5 bg-blue-500 animate-toast-bar";
+                iconEl.className = "fa-solid fa-circle-check text-emerald-400 text-base";
             }
 
-            toastTimer = setTimeout(() => {
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3500);
+            }, 3000);
         }
     </script>
 </body>
