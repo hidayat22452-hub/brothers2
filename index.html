@@ -70,57 +70,57 @@
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white pb-20 sm:pb-6">
 
     <!-- Mobile Top App Header Bar -->
-    <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md border-b border-slate-800">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-blue-600 w-10 h-10 rounded-xl shadow-lg shadow-blue-500/30 flex items-center justify-center text-white">
-                    <i class="fa-solid fa-plane-departure text-lg"></i>
+    <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-sm border-b border-slate-800">
+        <div class="max-w-5xl mx-auto px-3 py-2.5 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+                <div class="bg-blue-600 w-8 h-8 rounded-lg shadow-md shadow-blue-500/20 flex items-center justify-center text-white text-sm">
+                    <i class="fa-solid fa-plane-departure"></i>
                 </div>
                 <div>
-                    <h1 class="text-base font-bold leading-tight tracking-wide flex items-center gap-2">
-                        TSS Mobile Report
-                        <span class="text-[10px] bg-blue-500/20 text-blue-400 font-semibold px-2 py-0.5 rounded-full border border-blue-500/30">v2.5</span>
+                    <h1 class="text-sm font-bold leading-none tracking-wide flex items-center gap-1.5">
+                        TSS Mobile
+                        <span class="text-[9px] bg-blue-500/20 text-blue-400 font-semibold px-1.5 py-0.2 rounded-full border border-blue-500/30">v2.5</span>
                     </h1>
-                    <p class="text-[11px] text-slate-400">Terminal Service Support • Airport Ops</p>
+                    <p class="text-[10px] text-slate-400">Terminal Service Support</p>
                 </div>
             </div>
 
-            <div class="flex items-center space-x-2">
-                <span id="liveClock" class="hidden sm:inline-block text-xs font-mono bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700 text-slate-300">
+            <div class="flex items-center space-x-1.5">
+                <span id="liveClock" class="hidden sm:inline-block text-[11px] font-mono bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700 text-slate-300">
                     00:00:00 WIB
                 </span>
-                <button onclick="showInstallPWAInstruction()" class="p-2 text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 text-xs flex items-center gap-1.5 transition" title="Instal Aplikasi ke HP">
-                    <i class="fa-solid fa-mobile-screen-button text-blue-400"></i>
-                    <span class="hidden md:inline font-medium">Instal App</span>
+                <button id="pwaInstallBtn" onclick="triggerPWAInstall()" class="p-1.5 text-slate-300 hover:text-white bg-blue-600/90 hover:bg-blue-600 rounded-lg border border-blue-500/50 text-xs flex items-center gap-1.5 transition shadow-sm active:scale-95" title="Instal Aplikasi ke HP">
+                    <i class="fa-solid fa-download text-white text-xs"></i>
+                    <span class="font-medium text-[11px]">Instal App</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-5xl w-full mx-auto px-3 sm:px-6 py-4">
+    <main class="flex-grow max-w-5xl w-full mx-auto px-2.5 sm:px-5 py-3">
 
         <!-- TAB 1: FORM & PREVIEW BUILDER -->
-        <div id="formTab" class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div id="formTab" class="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
 
             <!-- LEFT COLUMN: INPUT FORM (7 Cols) -->
-            <div class="lg:col-span-7 space-y-4">
+            <div class="lg:col-span-7 space-y-3">
 
                 <!-- Section: Informasi Umum -->
-                <div class="bg-white rounded-2xl p-4.5 sm:p-5 border border-slate-200/90 shadow-sm space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                        <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center">
-                            <i class="fa-solid fa-clipboard-user text-blue-600 mr-2 text-sm"></i> Metadata & Informasi
+                <div class="bg-white rounded-xl p-3.5 border border-slate-200/90 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                        <h2 class="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                            <i class="fa-solid fa-clipboard-user text-blue-600 mr-1.5 text-xs"></i> Metadata & Informasi
                         </h2>
-                        <button onclick="resetForm()" class="text-xs text-rose-600 hover:text-rose-700 font-semibold transition flex items-center gap-1 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-100">
-                            <i class="fa-solid fa-arrow-rotate-right"></i> Reset
+                        <button onclick="resetForm()" class="text-[11px] text-rose-600 hover:text-rose-700 font-semibold transition flex items-center gap-1 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">
+                            <i class="fa-solid fa-arrow-rotate-right text-[10px]"></i> Reset
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+                    <div class="grid grid-cols-2 gap-2.5 text-xs">
                         <!-- Salam -->
                         <div>
-                            <label class="block font-semibold text-slate-700 mb-1">Salam Pembuka (Otomatis)</label>
-                            <select id="inputGreeting" onchange="isGreetingManuallySet = true; generateReportText()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                            <label class="block font-semibold text-slate-600 text-[11px] mb-1">Salam (Auto)</label>
+                            <select id="inputGreeting" onchange="isGreetingManuallySet = true; generateReportText()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-blue-500 focus:outline-none font-medium">
                                 <option value="Selamat Pagi">Selamat Pagi 🌅</option>
                                 <option value="Selamat Siang">Selamat Siang ☀️</option>
                                 <option value="Selamat Sore">Selamat Sore 🌇</option>
@@ -130,8 +130,8 @@
 
                         <!-- Kondisi Area -->
                         <div>
-                            <label class="block font-semibold text-slate-700 mb-1">Kondisi Area Saat Ini</label>
-                            <select id="inputAreaStatus" onchange="generateReportText()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                            <label class="block font-semibold text-slate-600 text-[11px] mb-1">Kondisi Area</label>
+                            <select id="inputAreaStatus" onchange="generateReportText()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-blue-500 focus:outline-none font-medium">
                                 <option value="landai">Landai</option>
                                 <option value="normal lancar">Normal Lancar</option>
                                 <option value="padat antrean">Padat Antrean</option>
@@ -141,10 +141,10 @@
                         </div>
 
                         <!-- Lokasi Area -->
-                        <div>
-                            <label class="block font-semibold text-slate-700 mb-1">Lokasi Area</label>
-                            <div class="space-y-1.5">
-                                <select id="inputLocationSelect" onchange="handleLocationChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-bold">
+                        <div class="col-span-2 sm:col-span-1">
+                            <label class="block font-semibold text-slate-600 text-[11px] mb-1">Lokasi Area</label>
+                            <div class="space-y-1">
+                                <select id="inputLocationSelect" onchange="handleLocationChange()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-blue-500 focus:outline-none font-bold">
                                     <option value="Checkin">Checkin</option>
                                     <option value="Curbside">Curbside</option>
                                     <option value="Plaza">Plaza</option>
@@ -155,112 +155,135 @@
                                     <option value="Boarding Lounge">Boarding Lounge</option>
                                     <option value="Toilet">Toilet 🚽</option>
                                     <option value="Mushola">Mushola 🕌</option>
-                                    <option value="custom">✏️ Tulis Lokasi Kustom...</option>
+                                    <option value="Update Konten">Update Konten 📺</option>
+                                    <option value="custom">✏️ Tulis Lokasi Custom...</option>
                                 </select>
-                                <input type="text" id="inputLocationCustom" oninput="updateCustomLocation()" placeholder="Ketik lokasi kustom..." class="hidden w-full bg-white border border-blue-400 rounded-xl px-3 py-2 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                <input type="text" id="inputLocationCustom" oninput="updateCustomLocation()" placeholder="Lokasi custom..." class="hidden w-full bg-white border border-blue-400 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-blue-500 focus:outline-none">
                                 <input type="hidden" id="inputLocation" value="Checkin">
                             </div>
                         </div>
 
+                        <!-- Hari & Tanggal -->
+                        <div class="col-span-2 sm:col-span-1">
+                            <label class="block font-semibold text-slate-600 text-[11px] mb-1">Hari & Tanggal</label>
+                            <input type="date" id="inputDate" onchange="generateReportText()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-blue-500 focus:outline-none font-medium">
+                        </div>
+
                         <!-- Detail Toilet -->
-                        <div id="toiletDetailContainer" class="hidden">
-                            <label class="block font-semibold text-teal-800 mb-1">
-                                <i class="fa-solid fa-restroom text-teal-600 mr-1"></i> Detail / Nama Toilet
+                        <div id="toiletDetailContainer" class="hidden col-span-2">
+                            <label class="block font-semibold text-teal-800 text-[11px] mb-1">
+                                <i class="fa-solid fa-restroom text-teal-600 mr-1"></i> Detail Toilet
                             </label>
-                            <input type="text" id="inputToiletDetail" oninput="generateReportText()" placeholder="Contoh: Gate 14 / Kedatangan Pier 1" class="w-full bg-teal-50/60 border border-teal-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-teal-500 focus:outline-none font-medium">
+                            <input type="text" id="inputToiletDetail" oninput="generateReportText()" placeholder="Contoh: Gate 14 / Kedatangan Pier 1" class="w-full bg-teal-50/60 border border-teal-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-teal-500 focus:outline-none font-medium">
                         </div>
 
                         <!-- Detail Mushola -->
-                        <div id="musholaDetailContainer" class="hidden">
-                            <label class="block font-semibold text-emerald-800 mb-1">
-                                <i class="fa-solid fa-mosque text-emerald-600 mr-1"></i> Detail / Nama Mushola
+                        <div id="musholaDetailContainer" class="hidden col-span-2">
+                            <label class="block font-semibold text-emerald-800 text-[11px] mb-1">
+                                <i class="fa-solid fa-mosque text-emerald-600 mr-1"></i> Detail Mushola
                             </label>
-                            <input type="text" id="inputMusholaDetail" oninput="generateReportText()" placeholder="Contoh: Gate 13 / Area Departure" class="w-full bg-emerald-50/60 border border-emerald-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+                            <input type="text" id="inputMusholaDetail" oninput="generateReportText()" placeholder="Contoh: Gate 13 / Area Departure" class="w-full bg-emerald-50/60 border border-emerald-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-emerald-500 focus:outline-none font-medium">
                         </div>
 
-                        <!-- Hari & Tanggal -->
-                        <div>
-                            <label class="block font-semibold text-slate-700 mb-1">Hari & Tanggal Laporan</label>
-                            <input type="date" id="inputDate" onchange="generateReportText()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                        <!-- Detail Update Konten -->
+                        <div id="kontenDetailContainer" class="hidden col-span-2 space-y-2 bg-purple-50/70 border border-purple-200 rounded-lg p-2.5">
+                            <label class="block font-bold text-purple-900 text-[11px] flex items-center gap-1">
+                                <i class="fa-solid fa-desktop text-purple-600"></i> Detail Laporan Update Konten
+                            </label>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Nama/Deskripsi Konten</label>
+                                <input type="text" id="inputKontenTitle" oninput="generateReportText()" value="Digital banner" placeholder="Contoh: Digital banner Himbauan Pelayanan Publik" class="w-full bg-white border border-purple-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-purple-500 focus:outline-none font-medium">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Sumber</label>
+                                    <input type="text" id="inputKontenSource" oninput="generateReportText()" value="" placeholder="Isi sumber jika ada..." class="w-full bg-white border border-purple-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-purple-500 focus:outline-none font-medium">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Link Dokumentasi</label>
+                                    <input type="text" id="inputKontenLink" oninput="generateReportText()" value="" placeholder="https://..." class="w-full bg-white border border-purple-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-purple-500 focus:outline-none font-medium">
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Nama Petugas -->
                         <div>
-                            <label class="block font-semibold text-slate-700 mb-1">Petugas TSS</label>
-                            <input type="text" id="inputOfficer" value="" oninput="generateReportText()" placeholder="Nama Lengkap Petugas" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                            <label class="block font-semibold text-slate-600 text-[11px] mb-1">Petugas TSS</label>
+                            <input type="text" id="inputOfficer" value="" oninput="generateReportText()" placeholder="Nama Petugas" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-blue-500 focus:outline-none font-medium">
                         </div>
 
                         <!-- Unit / Tim -->
                         <div>
-                            <label class="block font-semibold text-slate-700 mb-1">Unit / Tim</label>
-                            <input type="text" id="inputUnit" value="TSS T3 Internasional" oninput="generateReportText()" placeholder="Contoh: TSS T3 Internasional" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                            <label class="block font-semibold text-slate-600 text-[11px] mb-1">Unit / Tim</label>
+                            <input type="text" id="inputUnit" value="TSS T3 Internasional" oninput="generateReportText()" placeholder="Unit / Tim" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-blue-500 focus:outline-none font-medium">
                         </div>
                     </div>
                 </div>
 
                 <!-- Section: Pengecekan Fasilitas -->
-                <div class="bg-white rounded-2xl p-4.5 sm:p-5 border border-slate-200/90 shadow-sm space-y-4">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
+                <div class="bg-white rounded-xl p-3.5 border border-slate-200/90 shadow-sm space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-2 gap-1.5">
                         <div>
-                            <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center">
-                                <i class="fa-solid fa-list-check text-blue-600 mr-2 text-sm"></i> Status Pengecekan Fasilitas
+                            <h2 class="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-list-check text-blue-600 mr-1.5 text-xs"></i> Pengecekan / Item Lokasi
                             </h2>
-                            <p class="text-[11px] text-slate-500">Tap emoji untuk mengubah kondisi status</p>
                         </div>
 
                         <!-- Action buttons for Quick Status & Presets -->
-                        <div class="flex flex-wrap items-center gap-1.5 pt-1 sm:pt-0">
-                            <button id="btnPresetGeneral" onclick="loadFacilityPreset('general')" class="text-xs px-2.5 py-1.5 bg-blue-600 text-white border border-blue-700 rounded-lg font-medium shadow-sm transition active:scale-95">
+                        <div class="flex flex-wrap items-center gap-1">
+                            <button id="btnPresetGeneral" onclick="loadFacilityPreset('general')" class="text-[10px] px-2 py-1 bg-blue-600 text-white rounded-md font-medium shadow-sm transition active:scale-95">
                                 🏢 Umum
                             </button>
-                            <button id="btnPresetToilet" onclick="loadFacilityPreset('toilet')" class="text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95">
+                            <button id="btnPresetToilet" onclick="loadFacilityPreset('toilet')" class="text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95">
                                 🚽 Toilet
                             </button>
-                            <button id="btnPresetMushola" onclick="loadFacilityPreset('mushola')" class="text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95">
+                            <button id="btnPresetMushola" onclick="loadFacilityPreset('mushola')" class="text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95">
                                 🕌 Mushola
                             </button>
-                            <button onclick="setAllFacilityStatus('✅')" class="text-xs px-2.5 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg font-semibold hover:bg-emerald-100 transition active:scale-95">
-                                <i class="fa-solid fa-check-double mr-1"></i> Semua OK ✅
+                            <button id="btnPresetKonten" onclick="loadFacilityPreset('konten')" class="text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95">
+                                📺 Konten
                             </button>
-                            <button onclick="openAddFacilityModal()" class="text-xs px-2.5 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg font-semibold hover:bg-blue-100 transition active:scale-95">
-                                <i class="fa-solid fa-plus mr-1"></i> Item
+                            <button onclick="setAllFacilityStatus('✅')" class="text-[10px] px-2 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md font-semibold hover:bg-emerald-100 transition active:scale-95">
+                                OK ✅
+                            </button>
+                            <button onclick="openAddFacilityModal()" class="text-[10px] px-2 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-md font-semibold hover:bg-blue-100 transition active:scale-95">
+                                + Item
                             </button>
                         </div>
                     </div>
 
                     <!-- Facility Items Grid -->
-                    <div id="facilityContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div id="facilityContainer" class="grid grid-cols-2 sm:grid-cols-2 gap-2">
                         <!-- Items rendered dynamically -->
                     </div>
                 </div>
 
                 <!-- Section: Catatan / Note -->
-                <div class="bg-white rounded-2xl p-4.5 sm:p-5 border border-slate-200/90 shadow-sm space-y-3.5">
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                        <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center">
-                            <i class="fa-solid fa-note-sticky text-amber-500 mr-2 text-sm"></i> Catatan Kendala / Note
+                <div class="bg-white rounded-xl p-3.5 border border-slate-200/90 shadow-sm space-y-2.5">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                        <h2 class="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                            <i class="fa-solid fa-note-sticky text-amber-500 mr-1.5 text-xs"></i> Catatan / Note
                         </h2>
-                        <button onclick="addNoteField()" class="text-xs text-blue-600 hover:text-blue-700 font-bold transition flex items-center gap-1 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
-                            <i class="fa-solid fa-plus"></i> Tambah Note
+                        <button onclick="addNoteField()" class="text-[11px] text-blue-600 font-bold transition flex items-center gap-1 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                            + Note
                         </button>
                     </div>
 
-                    <div id="notesContainer" class="space-y-2">
+                    <div id="notesContainer" class="space-y-1.5">
                         <!-- Dynamic note inputs -->
                     </div>
                 </div>
 
                 <!-- Section: Dokumentasi Foto -->
-                <div class="bg-white rounded-2xl p-4.5 sm:p-5 border border-slate-200/90 shadow-sm space-y-3.5">
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="bg-white rounded-xl p-3.5 border border-slate-200/90 shadow-sm space-y-2.5">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2">
                         <div>
-                            <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center">
-                                <i class="fa-solid fa-camera text-blue-600 mr-2 text-sm"></i> Dokumentasi Foto (<span id="photoCount">0</span>/10)
+                            <h2 class="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-camera text-blue-600 mr-1.5 text-xs"></i> Dokumentasi Foto (<span id="photoCount">0</span>/10)
                             </h2>
-                            <p class="text-[11px] text-slate-500">Unggah hingga 10 foto bukti kegiatan</p>
                         </div>
-                        <button onclick="clearAllPhotos()" id="btnClearPhotos" class="hidden text-xs text-rose-600 hover:text-rose-700 font-semibold transition flex items-center gap-1 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-100">
-                            <i class="fa-solid fa-trash-can"></i> Hapus Foto
+                        <button onclick="clearAllPhotos()" id="btnClearPhotos" class="hidden text-[10px] text-rose-600 font-semibold transition flex items-center gap-1 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">
+                            Hapus
                         </button>
                     </div>
 
@@ -269,20 +292,20 @@
                     <input type="file" id="galleryFileInput" accept="image/*" multiple onchange="handleImageUpload(event)" class="hidden">
 
                     <!-- Upload Action Buttons -->
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <button type="button" onclick="triggerFileInput('cameraFileInput')" class="flex items-center justify-center p-3 bg-blue-50 hover:bg-blue-100/80 border border-blue-200/80 rounded-xl text-blue-800 font-semibold text-xs transition gap-2 shadow-sm active:scale-95">
-                            <i class="fa-solid fa-camera text-base text-blue-600"></i>
-                            <span>Ambil Kamera</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" onclick="triggerFileInput('cameraFileInput')" class="flex items-center justify-center py-2 px-3 bg-blue-50 hover:bg-blue-100/80 border border-blue-200/80 rounded-lg text-blue-800 font-semibold text-xs transition gap-1.5 shadow-sm active:scale-95">
+                            <i class="fa-solid fa-camera text-blue-600"></i>
+                            <span>Kamera</span>
                         </button>
 
-                        <button type="button" onclick="triggerFileInput('galleryFileInput')" class="flex items-center justify-center p-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-700 font-semibold text-xs transition gap-2 shadow-sm active:scale-95">
-                            <i class="fa-solid fa-images text-base text-slate-600"></i>
-                            <span>Galeri / File</span>
+                        <button type="button" onclick="triggerFileInput('galleryFileInput')" class="flex items-center justify-center py-2 px-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 font-semibold text-xs transition gap-1.5 shadow-sm active:scale-95">
+                            <i class="fa-solid fa-images text-slate-600"></i>
+                            <span>Galeri</span>
                         </button>
                     </div>
 
                     <!-- Photo Thumbnails Grid -->
-                    <div id="photoPreviewGrid" class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-2 pt-1">
+                    <div id="photoPreviewGrid" class="grid grid-cols-4 sm:grid-cols-6 gap-1.5 pt-0.5">
                         <!-- Dynamic Thumbnails -->
                     </div>
                 </div>
@@ -290,45 +313,42 @@
             </div>
 
             <!-- RIGHT COLUMN: LIVE OUTPUT & PREVIEW (5 Cols) -->
-            <div class="lg:col-span-5 space-y-4">
+            <div class="lg:col-span-5 space-y-3">
 
                 <!-- Live Preview Card -->
-                <div class="bg-white rounded-2xl p-4.5 sm:p-5 border border-slate-200/90 shadow-sm sticky top-20">
-                    <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3.5">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-brands fa-whatsapp text-2xl text-emerald-500"></i>
-                            <div>
-                                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Preview Pesan WA</h3>
-                                <p class="text-[11px] text-slate-400">Siap disalin atau dibagikan</p>
-                            </div>
+                <div class="bg-white rounded-xl p-3.5 border border-slate-200/90 shadow-sm sticky top-16">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
+                        <div class="flex items-center space-x-1.5">
+                            <i class="fa-brands fa-whatsapp text-xl text-emerald-500"></i>
+                            <h3 class="text-[11px] font-bold text-slate-800 uppercase tracking-wider">Preview Pesan WA</h3>
                         </div>
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                            Live Format
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800">
+                            Format Live
                         </span>
                     </div>
 
                     <!-- Chat Bubble Styled Preview -->
-                    <div class="bg-emerald-50/50 border border-emerald-200/60 rounded-xl p-3.5 font-mono text-xs text-slate-800 whitespace-pre-wrap break-words leading-relaxed min-h-[260px] max-h-[380px] overflow-y-auto select-all shadow-inner" id="reportPreviewBox">
+                    <div class="bg-emerald-50/50 border border-emerald-200/60 rounded-lg p-2.5 font-mono text-[11px] text-slate-800 whitespace-pre-wrap break-words leading-relaxed min-h-[220px] max-h-[320px] overflow-y-auto select-all shadow-inner" id="reportPreviewBox">
                         <!-- Auto-generated message -->
                     </div>
 
                     <!-- Photo Attachments Preview -->
-                    <div id="previewPhotosContainer" class="mt-3 hidden p-2.5 bg-emerald-100/40 rounded-xl border border-emerald-200/60">
+                    <div id="previewPhotosContainer" class="mt-2.5 hidden p-2 bg-emerald-100/40 rounded-lg border border-emerald-200/60">
                         <!-- Rendered by JS -->
                     </div>
 
                     <!-- Action Buttons (Icon Only) -->
-                    <div class="mt-4 grid grid-cols-3 gap-2.5">
-                        <button onclick="shareReportWithPhotos()" title="Bagikan Laporan (Teks + Foto)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-3 rounded-xl shadow-md shadow-emerald-600/20 flex items-center justify-center transition active:scale-95">
-                            <i class="fa-solid fa-share-nodes text-lg"></i>
+                    <div class="mt-3 grid grid-cols-3 gap-2">
+                        <button onclick="shareReportWithPhotos()" title="Bagikan Laporan" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg shadow-sm flex items-center justify-center transition active:scale-95">
+                            <i class="fa-solid fa-share-nodes text-base"></i>
                         </button>
 
-                        <button onclick="copyReportText()" title="Salin Teks Pesan" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-3 rounded-xl shadow-md flex items-center justify-center transition active:scale-95">
-                            <i class="fa-regular fa-copy text-lg"></i>
+                        <button onclick="copyReportText()" title="Salin Teks" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-lg shadow-sm flex items-center justify-center transition active:scale-95">
+                            <i class="fa-regular fa-copy text-base"></i>
                         </button>
 
-                        <button onclick="saveReportToHistory()" title="Simpan ke Riwayat App" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-3 rounded-xl shadow-md shadow-blue-600/20 flex items-center justify-center transition active:scale-95">
-                            <i class="fa-solid fa-floppy-disk text-lg"></i>
+                        <button onclick="saveReportToHistory()" title="Simpan ke Riwayat" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg shadow-sm flex items-center justify-center transition active:scale-95">
+                            <i class="fa-solid fa-floppy-disk text-base"></i>
                         </button>
                     </div>
                 </div>
@@ -465,8 +485,27 @@
 
     <!-- JavaScript Application Logic -->
     <script>
+        // Haptic Feedback Helper
+        function triggerHaptic() {
+            if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+                try {
+                    navigator.vibrate(15);
+                } catch (e) {
+                    // Ignore if vibration is not allowed or supported
+                }
+            }
+        }
+
+        // Global State Variables
+        let uploadedPhotos = [];
+        let notes = [''];
+        let currentPreset = 'general';
+        let reportHistory = [];
+        let isGreetingManuallySet = false;
+
         // Status Options for Cycling
         const statusOptions = ['✅', '⚠️', '🔧', '❌'];
+        const statusKontenOptions = ['1 Titik', '2 Titik', '3 Titik', '4 Titik', '5 Titik', '0 Titik'];
 
         // Default Facilities Data
         const defaultFacilities = [
@@ -494,132 +533,127 @@
             { id: 'mf4', name: 'Mukena', status: '✅' }
         ];
 
-        let facilities = [...defaultFacilities];
-        let currentPreset = 'general';
-        let notes = [''];
-        let uploadedPhotos = []; // Array of { id, file, base64 }
-        let reportHistory = [];
-        let isGreetingManuallySet = false;
+        const kontenPresetFacilities = [
+            // 1. Keberangkatan
+            { id: 'kf1', name: 'Island A-B', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf2', name: 'Island D-E', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf3', name: 'Island E-F', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf4', name: 'ME 1', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf5', name: 'ME 2', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf6', name: 'ME 3', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf7', name: 'ME 4', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf8', name: 'ME 5', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf9', name: 'Curbside gate 1', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf10', name: 'Curbside gate 2', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf11', name: 'Curbside gate 3', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf12', name: 'Curbside gate 4', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            { id: 'kf13', name: 'Curbside gate 5', status: '1 Titik', category: '1. Digital banner keberangkatan' },
+            // 2. Kedatangan
+            { id: 'kf14', name: 'Plaza gate 1', status: '1 Titik', category: '2. Digital banner Kedatangan' },
+            { id: 'kf15', name: 'Plaza gate 2', status: '1 Titik', category: '2. Digital banner Kedatangan' },
+            { id: 'kf16', name: 'Plaza gate 3', status: '1 Titik', category: '2. Digital banner Kedatangan' },
+            { id: 'kf17', name: 'Plaza gate 4', status: '1 Titik', category: '2. Digital banner Kedatangan' },
+            { id: 'kf18', name: 'Plaza gate 5', status: '1 Titik', category: '2. Digital banner Kedatangan' },
+            // 3. BL
+            { id: 'kf19', name: 'BL Gate 8-9', status: '1 Titik', category: '3. Digital banner BL' },
+            { id: 'kf20', name: 'BL Gate 10', status: '1 Titik', category: '3. Digital banner BL' }
+        ];
 
-        // Auto Greeting Calculation based on real time
-        function getAutoGreeting() {
-            const now = new Date();
-            const hour = now.getHours();
-            const minutes = now.getMinutes();
-            const timeVal = hour + (minutes / 60);
+        let facilities = JSON.parse(JSON.stringify(defaultFacilities));
 
-            if (timeVal >= 4 && timeVal < 11) {
-                return 'Selamat Pagi';
-            } else if (timeVal >= 11 && timeVal < 15) {
-                return 'Selamat Siang';
-            } else if (timeVal >= 15 && timeVal < 18.5) {
-                return 'Selamat Sore';
-            } else {
-                return 'Selamat Malam';
-            }
-        }
-
+        // Auto Greeting based on Time of Day
         function setAutomaticGreeting(force = false) {
-            if (!isGreetingManuallySet || force) {
-                const greetingSelect = document.getElementById('inputGreeting');
-                if (greetingSelect) {
-                    greetingSelect.value = getAutoGreeting();
-                }
+            if (isGreetingManuallySet && !force) return;
+            const hour = new Date().getHours();
+            let greeting = 'Selamat Pagi';
+            if (hour >= 4 && hour < 11) {
+                greeting = 'Selamat Pagi';
+            } else if (hour >= 11 && hour < 15) {
+                greeting = 'Selamat Siang';
+            } else if (hour >= 15 && hour < 18.5) {
+                greeting = 'Selamat Sore';
+            } else {
+                greeting = 'Selamat Malam';
+            }
+            const select = document.getElementById('inputGreeting');
+            if (select) {
+                select.value = greeting;
             }
         }
 
-        // Haptic feedback for mobile devices
-        function triggerHaptic() {
-            if ('vibrate' in navigator) {
-                try { navigator.vibrate(25); } catch(e){}
-            }
-        }
-
-        // Initial setup on Window Load
-        window.onload = function() {
-            // Set default date to today
-            const today = new Date().toISOString().split('T')[0];
-            const dateInput = document.getElementById('inputDate');
-            if (dateInput) dateInput.value = today;
-
-            // Set real-time automatic greeting
-            setAutomaticGreeting();
-
-            // Load saved history
-            loadHistoryFromStorage();
-            
-            // Render Facility items
-            renderFacilities();
-
-            // Render Notes
-            renderNotes();
-
-            // Render Photo Previews
-            renderPhotoPreviews();
-
-            // Initial Report Generation
-            generateReportText();
-
-            // Start Clock
-            updateClock();
-            setInterval(updateClock, 1000);
-        };
-
-        // Realtime Clock Header & Dynamic Greeting Check
-        function updateClock() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('id-ID', { hour12: false }) + ' WIB';
+        // Live Clock Header
+        function updateLiveClock() {
             const clockEl = document.getElementById('liveClock');
-            if (clockEl) clockEl.innerText = timeStr;
-
-            if (!isGreetingManuallySet) {
-                const autoGreeting = getAutoGreeting();
-                const greetingSelect = document.getElementById('inputGreeting');
-                if (greetingSelect && greetingSelect.value !== autoGreeting) {
-                    greetingSelect.value = autoGreeting;
-                    generateReportText();
-                }
-            }
+            if (!clockEl) return;
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            clockEl.innerText = `${hours}:${minutes}:${seconds} WIB`;
         }
 
-        // Tab Switcher
+        // Tab Switching Logic
         function switchTab(tabId) {
             triggerHaptic();
-            const formTab = document.getElementById('formTab');
-            const historyTab = document.getElementById('historyTab');
-            const infoTab = document.getElementById('infoTab');
+            ['formTab', 'historyTab', 'infoTab'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (id === tabId) el.classList.remove('hidden');
+                    else el.classList.add('hidden');
+                }
+            });
 
-            const mbNavForm = document.getElementById('mbNavForm');
-            const mbNavHistory = document.getElementById('mbNavHistory');
-            const mbNavInfo = document.getElementById('mbNavInfo');
+            const navForm = document.getElementById('mbNavForm');
+            const navHistory = document.getElementById('mbNavHistory');
+            const navInfo = document.getElementById('mbNavInfo');
 
-            // Hide all tabs
-            if (formTab) formTab.classList.add('hidden');
-            if (historyTab) historyTab.classList.add('hidden');
-            if (infoTab) infoTab.classList.add('hidden');
-
-            // Reset mobile nav highlights
-            if (mbNavForm) mbNavForm.className = "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition";
-            if (mbNavHistory) mbNavHistory.className = "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition relative";
-            if (mbNavInfo) mbNavInfo.className = "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition";
+            if (navForm) navForm.className = (tabId === 'formTab') ? "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition" : "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition";
+            if (navHistory) navHistory.className = (tabId === 'historyTab') ? "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition relative" : "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition relative";
+            if (navInfo) navInfo.className = (tabId === 'infoTab') ? "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition" : "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition";
 
             if (tabId === 'historyTab') {
-                if (historyTab) historyTab.classList.remove('hidden');
-                if (mbNavHistory) mbNavHistory.className = "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition relative";
                 renderHistoryList();
-            } else if (tabId === 'infoTab') {
-                if (infoTab) infoTab.classList.remove('hidden');
-                if (mbNavInfo) mbNavInfo.className = "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition";
-            } else {
-                if (formTab) formTab.classList.remove('hidden');
-                if (mbNavForm) mbNavForm.className = "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition";
             }
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function showInstallPWAInstruction() {
             switchTab('infoTab');
+        }
+
+        // Render Facilities Check items
+        function renderFacilities() {
+            const container = document.getElementById('facilityContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            facilities.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg p-1.5 transition hover:bg-slate-100";
+                div.innerHTML = `
+                    <span class="text-xs font-semibold text-slate-700 truncate pr-1" title="${item.name}">${item.name}</span>
+                    <div class="flex items-center space-x-1 flex-shrink-0">
+                        <button onclick="cycleFacilityStatus(${index})" class="px-2 py-0.5 bg-white border border-slate-200 rounded text-xs font-bold shadow-sm hover:bg-slate-50 active:scale-95 transition">
+                            ${item.status}
+                        </button>
+                        <button onclick="removeFacilityItem(${index})" class="text-slate-400 hover:text-rose-600 text-[10px] p-1 transition">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Format Date to Simple Indonesian format (misal: 9 September 2026)
+        function getFormattedSimpleDate(dateString) {
+            if (!dateString) return '';
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const parts = dateString.split('-');
+            if (parts.length !== 3) return dateString;
+            const dayNum = parseInt(parts[2], 10);
+            const monthName = months[parseInt(parts[1], 10) - 1];
+            const yearNum = parts[0];
+            return `${dayNum} ${monthName} ${yearNum}`;
         }
 
         // Format Date to Indonesian format
@@ -654,9 +688,12 @@
 
             const isToiletCheck = (currentPreset === 'toilet') || (location.toLowerCase().includes('toilet'));
             const isMusholaCheck = (currentPreset === 'mushola') || (location.toLowerCase().includes('mushola'));
+            const isKontenCheck = (currentPreset === 'konten') || (location.toLowerCase().includes('konten'));
 
             const toiletContainer = document.getElementById('toiletDetailContainer');
             const musholaContainer = document.getElementById('musholaDetailContainer');
+            const kontenContainer = document.getElementById('kontenDetailContainer');
+
             if (toiletContainer) {
                 if (isToiletCheck) toiletContainer.classList.remove('hidden');
                 else toiletContainer.classList.add('hidden');
@@ -664,6 +701,57 @@
             if (musholaContainer) {
                 if (isMusholaCheck && !isToiletCheck) musholaContainer.classList.remove('hidden');
                 else musholaContainer.classList.add('hidden');
+            }
+            if (kontenContainer) {
+                if (isKontenCheck) kontenContainer.classList.remove('hidden');
+                else kontenContainer.classList.add('hidden');
+            }
+
+            // Mode Khusus Laporan Update Konten
+            if (isKontenCheck) {
+                const kontenTitle = document.getElementById('inputKontenTitle')?.value.trim() || 'Digital banner';
+                const kontenSource = document.getElementById('inputKontenSource')?.value.trim() || '';
+                const kontenLink = document.getElementById('inputKontenLink')?.value.trim() || '';
+                const simpleDate = getFormattedSimpleDate(dateVal);
+
+                let totalTitik = 0;
+                let groupedItems = {};
+
+                // Group items by category
+                facilities.forEach(item => {
+                    const cat = item.category || 'Daftar Titik';
+                    if (!groupedItems[cat]) {
+                        groupedItems[cat] = [];
+                    }
+                    groupedItems[cat].push(item);
+
+                    const match = item.status.match(/\d+/);
+                    if (match) {
+                        totalTitik += parseInt(match[0], 10);
+                    }
+                });
+
+                let msg = `Telah dilakukan update konten ${kontenTitle} di Terminal 3 \n`;
+                msg += `${simpleDate}\n\n`;
+
+                Object.keys(groupedItems).forEach(catName => {
+                    msg += `${catName}\n`;
+                    groupedItems[catName].forEach(item => {
+                        msg += `${item.name}  : ${item.status}\n`;
+                    });
+                    msg += `\n`;
+                });
+
+                msg += `Total : ${totalTitik} Titik\n\n`;
+                msg += `Sumber : ${kontenSource}\n\n`;
+                msg += `Link Dokumentasi : ${kontenLink}\n\n`;
+                msg += `Demikian disampaikan, Terima Kasih`;
+
+                const previewBox = document.getElementById('reportPreviewBox');
+                if (previewBox) {
+                    previewBox.innerText = msg;
+                }
+                return msg;
             }
 
             let message = `${greeting}\n`;
@@ -732,10 +820,16 @@
                 if (currentPreset !== 'mushola') {
                     loadFacilityPreset('mushola');
                 }
+            } else if (select.value === 'Update Konten') {
+                customInput.classList.add('hidden');
+                hiddenLoc.value = 'Update Konten';
+                if (currentPreset !== 'konten') {
+                    loadFacilityPreset('konten');
+                }
             } else {
                 customInput.classList.add('hidden');
                 hiddenLoc.value = select.value;
-                if (currentPreset === 'toilet' || currentPreset === 'mushola') {
+                if (currentPreset === 'toilet' || currentPreset === 'mushola' || currentPreset === 'konten') {
                     loadFacilityPreset('general');
                 }
             }
@@ -756,10 +850,12 @@
             const btnGen = document.getElementById('btnPresetGeneral');
             const btnToi = document.getElementById('btnPresetToilet');
             const btnMus = document.getElementById('btnPresetMushola');
+            const btnKon = document.getElementById('btnPresetKonten');
 
             if (btnGen) btnGen.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
             if (btnToi) btnToi.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
             if (btnMus) btnMus.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
+            if (btnKon) btnKon.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
 
             if (presetType === 'toilet') {
                 facilities = JSON.parse(JSON.stringify(toiletPresetFacilities));
@@ -767,6 +863,9 @@
             } else if (presetType === 'mushola') {
                 facilities = JSON.parse(JSON.stringify(musholaPresetFacilities));
                 if (btnMus) btnMus.className = "text-xs px-2.5 py-1.5 bg-emerald-600 text-white border border-emerald-700 rounded-lg font-medium shadow-sm transition active:scale-95";
+            } else if (presetType === 'konten') {
+                facilities = JSON.parse(JSON.stringify(kontenPresetFacilities));
+                if (btnKon) btnKon.className = "text-xs px-2.5 py-1.5 bg-purple-600 text-white border border-purple-700 rounded-lg font-medium shadow-sm transition active:scale-95";
             } else {
                 facilities = JSON.parse(JSON.stringify(defaultFacilities));
                 if (btnGen) btnGen.className = "text-xs px-2.5 py-1.5 bg-blue-600 text-white border border-blue-700 rounded-lg font-medium shadow-sm transition active:scale-95";
@@ -776,37 +875,12 @@
             generateReportText();
         }
 
-        // Render facilities list UI
-        function renderFacilities() {
-            const container = document.getElementById('facilityContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            facilities.forEach((item, index) => {
-                const el = document.createElement('div');
-                el.className = "flex items-center justify-between bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 hover:border-slate-300 transition shadow-sm";
-                el.innerHTML = `
-                    <div class="flex items-center space-x-2 flex-grow pr-2">
-                        <span class="text-xs font-semibold text-slate-700">${item.name}</span>
-                    </div>
-                    <div class="flex items-center space-x-1.5">
-                        <button onclick="cycleFacilityStatus(${index})" class="px-3 py-1 rounded-xl text-sm bg-white border border-slate-200 shadow-sm hover:bg-slate-100 transition select-none active:scale-90" title="Klik untuk ubah status">
-                            ${item.status}
-                        </button>
-                        <button onclick="removeFacilityItem(${index})" class="text-slate-400 hover:text-rose-600 text-xs p-1 transition" title="Hapus item">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                `;
-                container.appendChild(el);
-            });
-        }
-
         function cycleFacilityStatus(index) {
             triggerHaptic();
             const current = facilities[index].status;
-            const idx = statusOptions.indexOf(current);
-            const next = statusOptions[(idx + 1) % statusOptions.length];
+            const options = (currentPreset === 'konten') ? statusKontenOptions : statusOptions;
+            const idx = options.indexOf(current);
+            const next = options[(idx + 1) % options.length];
             facilities[index].status = next;
             renderFacilities();
             generateReportText();
@@ -1287,6 +1361,84 @@
                 toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-20', 'opacity-0');
             }, 3000);
+        }
+
+        // DOM Content Loaded Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('inputDate');
+            if (dateInput) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dateInput.value = `${yyyy}-${mm}-${dd}`;
+            }
+
+            setAutomaticGreeting();
+            loadFacilityPreset('general');
+            renderNotes();
+            renderPhotoPreviews();
+            loadHistoryFromStorage();
+            generateReportText();
+
+            updateLiveClock();
+            setInterval(updateLiveClock, 1000);
+
+            // Inisialisasi Service Worker untuk Kemampuan PWA Offline
+            registerOfflineServiceWorker();
+        });
+
+        // Dynamic PWA Install Prompt Handler
+        let deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const btn = document.getElementById('pwaInstallBtn');
+            if (btn) {
+                btn.classList.add('animate-pulse', 'bg-blue-600');
+            }
+        });
+
+        function triggerPWAInstall() {
+            triggerHaptic();
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showToast("Aplikasi berhasil diinstal ke HP!", "success");
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                showInstallPWAInstruction();
+            }
+        }
+
+        // Inline Service Worker untuk Mode Luring (Offline PWA)
+        function registerOfflineServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    const swCode = `
+                        const CACHE_NAME = 'tss-mobile-v2.5';
+                        self.addEventListener('install', e => {
+                            self.skipWaiting();
+                        });
+                        self.addEventListener('activate', e => {
+                            e.waitUntil(clients.claim());
+                        });
+                        self.addEventListener('fetch', e => {
+                            e.respondWith(
+                                fetch(e.request).catch(() => caches.match(e.request))
+                            );
+                        });
+                    `;
+                    const blob = new Blob([swCode], { type: 'application/javascript' });
+                    const swUrl = URL.createObjectURL(blob);
+                    navigator.serviceWorker.register(swUrl).catch(() => {});
+                } catch (e) {
+                    // Ignore SW registration fallback
+                }
+            }
         }
     </script>
 </body>
