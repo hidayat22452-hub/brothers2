@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -92,10 +93,6 @@
                 <span id="liveClock" class="hidden sm:inline-block text-[11px] font-mono bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700 text-slate-300">
                     00:00:00 WIB
                 </span>
-                <button id="pwaInstallBtn" onclick="triggerPWAInstall()" class="p-1.5 text-slate-300 hover:text-white bg-blue-600/90 hover:bg-blue-600 rounded-lg border border-blue-500/50 text-xs flex items-center gap-1.5 transition shadow-sm active:scale-95" title="Instal Aplikasi ke HP">
-                    <i class="fa-solid fa-download text-white text-xs"></i>
-                    <span class="font-medium text-[11px]">Instal App</span>
-                </button>
             </div>
         </div>
     </header>
@@ -150,11 +147,6 @@
                     <span id="sidebarHistoryBadge" class="bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
                 </button>
 
-                <button onclick="sidebarNavigateTab('infoTab')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition active:scale-98">
-                    <i class="fa-solid fa-circle-info text-emerald-400 w-4 text-center"></i>
-                    <span>Panduan Instal App</span>
-                </button>
-
                 <p class="px-2 pt-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Preset Pengecekan</p>
                 
                 <button onclick="sidebarSelectPreset('general')" class="w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
@@ -175,6 +167,11 @@
                 <button onclick="sidebarSelectPreset('konten')" class="w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
                     <span class="w-4 text-center">📺</span>
                     <span>Update Konten Banner</span>
+                </button>
+
+                <button onclick="sidebarSelectPreset('umroh')" class="w-full flex items-center space-x-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                    <span class="w-4 text-center">🚌</span>
+                    <span>Split Umroh</span>
                 </button>
             </div>
         </div>
@@ -250,6 +247,7 @@
                                     <option value="Toilet">Toilet 🚽</option>
                                     <option value="Mushola">Mushola 🕌</option>
                                     <option value="Update Konten">Update Konten 📺</option>
+                                    <option value="Split Umroh">Split Umroh 🚌</option>
                                     <option value="custom">✏️ Tulis Lokasi Custom...</option>
                                 </select>
                                 <input type="text" id="inputLocationCustom" oninput="updateCustomLocation()" placeholder="Lokasi custom..." class="hidden w-full bg-white border border-blue-400 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-blue-500 focus:outline-none">
@@ -300,6 +298,107 @@
                             </div>
                         </div>
 
+                        <!-- Detail Split Umroh -->
+                        <div id="umrohDetailContainer" class="hidden col-span-2 space-y-2 bg-amber-50/70 border border-amber-200 rounded-lg p-2.5">
+                            <label class="block font-bold text-amber-900 text-[11px] flex items-center gap-1">
+                                <i class="fa-solid fa-bus text-amber-600"></i> Detail Bussing Split Operation (Umroh)
+                            </label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">No. Flight</label>
+                                    <input type="text" id="inputUmrohFlight" list="flightSuggestions" oninput="generateReportText()" placeholder="EY.472 / EK.358" class="w-full bg-white border border-amber-300 rounded-lg px-2 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-amber-500 focus:outline-none font-bold uppercase">
+                                    <datalist id="flightSuggestions">
+                                        <!-- Etihad Airways (EY) ke Soekarno-Hatta (CGK) -->
+                                        <option value="EY.472">Etihad Airways (AUH - CGK)</option>
+                                        <option value="EY.474">Etihad Airways (AUH - CGK)</option>
+                                        <option value="EY.476">Etihad Airways (AUH - CGK)</option>
+                                        <option value="EY.478">Etihad Airways (AUH - CGK)</option>
+                                        <!-- Emirates (EK) ke Soekarno-Hatta (CGK) -->
+                                        <option value="EK.356">Emirates (DXB - CGK)</option>
+                                        <option value="EK.358">Emirates (DXB - CGK)</option>
+                                        <!-- Qatar Airways (QR) ke Soekarno-Hatta (CGK) -->
+                                        <option value="QR.954">Qatar Airways (DOH - CGK)</option>
+                                        <option value="QR.956">Qatar Airways (DOH - CGK)</option>
+                                        <option value="QR.958">Qatar Airways (DOH - CGK)</option>
+                                        <!-- Malaysia Airlines (MH) ke Soekarno-Hatta (CGK) -->
+                                        <option value="MH.711">Malaysia Airlines (KUL - CGK)</option>
+                                        <option value="MH.713">Malaysia Airlines (KUL - CGK)</option>
+                                        <option value="MH.715">Malaysia Airlines (KUL - CGK)</option>
+                                        <option value="MH.717">Malaysia Airlines (KUL - CGK)</option>
+                                        <option value="MH.721">Malaysia Airlines (KUL - CGK)</option>
+                                        <option value="MH.723">Malaysia Airlines (KUL - CGK)</option>
+                                        <option value="MH.725">Malaysia Airlines (KUL - CGK)</option>
+                                        <option value="MH.727">Malaysia Airlines (KUL - CGK)</option>
+                                        <!-- Hainan Airlines (HU) ke Soekarno-Hatta (CGK) -->
+                                        <option value="HU.701">Hainan Airlines (HAK - CGK)</option>
+                                        <!-- SriLankan Airlines (UL) ke Soekarno-Hatta (CGK) -->
+                                        <option value="UL.364">SriLankan Airlines (CMB - CGK)</option>
+                                        <!-- Ethiopian Airlines (ET) ke Soekarno-Hatta (CGK) -->
+                                        <option value="ET.628">Ethiopian Airlines (ADD - CGK)</option>
+                                        <!-- TransNusa Internasional (8B) ke Soekarno-Hatta (CGK) -->
+                                        <option value="8B.151">TransNusa (SIN - CGK)</option>
+                                        <option value="8B.153">TransNusa (SIN - CGK)</option>
+                                        <option value="8B.155">TransNusa (SIN - CGK)</option>
+                                        <option value="8B.157">TransNusa (SIN - CGK)</option>
+                                        <option value="8B.651">TransNusa (KUL - CGK)</option>
+                                        <option value="8B.653">TransNusa (KUL - CGK)</option>
+                                        <option value="8B.655">TransNusa (KUL - CGK)</option>
+                                        <option value="8B.657">TransNusa (KUL - CGK)</option>
+                                        <option value="8B.671">TransNusa (JHB - CGK)</option>
+                                        <option value="8B.691">TransNusa (PEN - CGK)</option>
+                                        <option value="8B.861">TransNusa (CAN - CGK)</option>
+                                    </datalist>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Bus ke</label>
+                                    <input type="text" id="inputUmrohBusKe" oninput="generateReportText()" placeholder="1" class="w-full bg-white border border-amber-300 rounded-lg px-2 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-amber-500 focus:outline-none font-medium">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">No. Bus</label>
+                                    <input type="text" id="inputUmrohBusNo" oninput="generateReportText()" placeholder="A06" class="w-full bg-white border border-amber-300 rounded-lg px-2 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-amber-500 focus:outline-none font-bold uppercase">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Jam Request</label>
+                                    <div class="relative">
+                                        <input type="text" id="inputUmrohJamReq" oninput="generateReportText()" placeholder="20:26" class="w-full bg-white border border-amber-300 rounded-lg pl-2 pr-7 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-amber-500 focus:outline-none font-medium">
+                                        <button type="button" onclick="setCurrentTimeToInput('inputUmrohJamReq')" title="Isi Jam Sekarang" class="absolute right-1 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-800 hover:bg-amber-100 p-1 rounded transition active:scale-90">
+                                            <i class="fa-regular fa-clock text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Jam Datang</label>
+                                    <div class="relative">
+                                        <input type="text" id="inputUmrohJamDatang" oninput="generateReportText()" placeholder="20:35" class="w-full bg-white border border-amber-300 rounded-lg pl-2 pr-7 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-amber-500 focus:outline-none font-medium">
+                                        <button type="button" onclick="setCurrentTimeToInput('inputUmrohJamDatang')" title="Isi Jam Sekarang" class="absolute right-1 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-800 hover:bg-amber-100 p-1 rounded transition active:scale-90">
+                                            <i class="fa-regular fa-clock text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Jam Berangkat</label>
+                                    <div class="relative">
+                                        <input type="text" id="inputUmrohJamBerangkat" oninput="generateReportText()" placeholder="20:49" class="w-full bg-white border border-amber-300 rounded-lg pl-2 pr-7 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-amber-500 focus:outline-none font-medium">
+                                        <button type="button" onclick="setCurrentTimeToInput('inputUmrohJamBerangkat')" title="Isi Jam Sekarang" class="absolute right-1 top-1/2 -translate-y-1/2 text-amber-600 hover:text-amber-800 hover:bg-amber-100 p-1 rounded transition active:scale-90">
+                                            <i class="fa-regular fa-clock text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Total Pax</label>
+                                    <input type="text" id="inputUmrohTotalPax" oninput="generateReportText()" placeholder="40 pax" class="w-full bg-white border border-amber-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-amber-500 focus:outline-none font-medium">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Rute Terminal</label>
+                                    <input type="text" id="inputUmrohRute" oninput="generateReportText()" value="T3 menuju ke T2" placeholder="T3 menuju ke T2" class="w-full bg-white border border-amber-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:ring-1 focus:ring-amber-500 focus:outline-none font-medium">
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Nama Petugas -->
                         <div>
                             <label class="block font-semibold text-slate-600 text-[11px] mb-1">Petugas TSS</label>
@@ -314,48 +413,33 @@
                     </div>
                 </div>
 
-                <!-- Section: Pengecekan Fasilitas (Sistem Accordion/Collapse) -->
-                <div class="bg-white rounded-xl border border-slate-200/90 shadow-sm overflow-hidden">
-                    <!-- Accordion Header -->
-                    <button onclick="toggleFacilityCheck()" class="w-full flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 transition active:bg-slate-200 border-b border-slate-100">
-                        <h2 class="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center">
-                            <i class="fa-solid fa-list-check text-blue-600 mr-1.5 text-xs"></i> Pengecekan Fasilitas
-                        </h2>
-                        <div class="flex items-center gap-2">
-                            <span id="facilityCountBadge" class="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-md font-bold">6 Item</span>
-                            <i id="facilityToggleIcon" class="fa-solid fa-chevron-down text-slate-400 text-sm transition-transform duration-300"></i>
+                <!-- Section: Pengecekan Fasilitas (Collapsible & Hidden on Split Umroh) -->
+                <div id="facilityCheckSection" class="bg-white rounded-xl p-3.5 border border-slate-200/90 shadow-sm">
+                    <button type="button" onclick="toggleFacilityCheck()" class="w-full flex items-center justify-between text-left">
+                        <div class="flex items-center space-x-2">
+                            <h2 class="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-list-check text-blue-600 mr-1.5 text-xs"></i> Pengecekan Fasilitas
+                            </h2>
+                            <span id="facilityCountBadge" class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full border border-blue-100">6 Item</span>
                         </div>
+                        <i id="facilityToggleIcon" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
                     </button>
 
-                    <!-- Accordion Content (Disembunyikan di Halaman Utama secara default) -->
-                    <div id="facilityCheckContent" class="hidden p-3.5 space-y-3">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-2 gap-1.5">
-                            <!-- Action buttons for Quick Status & Presets -->
-                            <div class="flex flex-wrap items-center gap-1">
-                                <button id="btnPresetGeneral" onclick="loadFacilityPreset('general')" class="text-[10px] px-2 py-1 bg-blue-600 text-white rounded-md font-medium shadow-sm transition active:scale-95">
-                                    🏢 Umum
-                                </button>
-                                <button id="btnPresetToilet" onclick="loadFacilityPreset('toilet')" class="text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95">
-                                    🚽 Toilet
-                                </button>
-                                <button id="btnPresetMushola" onclick="loadFacilityPreset('mushola')" class="text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95">
-                                    🕌 Mushola
-                                </button>
-                                <button id="btnPresetKonten" onclick="loadFacilityPreset('konten')" class="text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95">
-                                    📺 Konten
-                                </button>
-                                <button onclick="setAllFacilityStatus('✅')" class="text-[10px] px-2 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md font-semibold hover:bg-emerald-100 transition active:scale-95">
-                                    OK ✅
-                                </button>
-                                <button onclick="openAddFacilityModal()" class="text-[10px] px-2 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-md font-semibold hover:bg-blue-100 transition active:scale-95">
-                                    + Item
-                                </button>
+                    <div id="facilityCheckContent" class="hidden mt-3 pt-2.5 border-t border-slate-100 space-y-2.5">
+                        <!-- Quick Presets & Actions -->
+                        <div class="flex flex-wrap items-center justify-between gap-1.5">
+                            <div class="flex flex-wrap gap-1">
+                                <button type="button" id="btnPresetGeneral" onclick="loadFacilityPreset('general')" class="text-[10px] px-2 py-1 bg-blue-600 text-white border border-blue-700 rounded-md font-medium shadow-sm transition active:scale-95">Umum</button>
+                                <button type="button" id="btnPresetToilet" onclick="loadFacilityPreset('toilet')" class="text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95">Toilet</button>
+                                <button type="button" id="btnPresetMushola" onclick="loadFacilityPreset('mushola')" class="text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95">Mushola</button>
+                                <button type="button" id="btnPresetKonten" onclick="loadFacilityPreset('konten')" class="text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95">Banner</button>
                             </div>
+                            <button type="button" onclick="openAddFacilityModal()" class="text-[10px] px-2 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md font-bold hover:bg-emerald-100 transition">+ Item</button>
                         </div>
 
-                        <!-- Facility Items Grid -->
-                        <div id="facilityContainer" class="grid grid-cols-2 sm:grid-cols-2 gap-2">
-                            <!-- Items rendered dynamically -->
+                        <!-- Dynamic Facilities Grid -->
+                        <div id="facilityContainer" class="grid grid-cols-2 gap-1.5">
+                            <!-- Rendered by JS -->
                         </div>
                     </div>
                 </div>
@@ -489,57 +573,6 @@
             </div>
         </div>
 
-        <!-- TAB 3: APP INFO & PWA GUIDE -->
-        <div id="infoTab" class="hidden space-y-4">
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm space-y-4">
-                <div class="border-b border-slate-100 pb-3">
-                    <h2 class="text-sm font-bold text-slate-800 flex items-center">
-                        <i class="fa-solid fa-mobile-screen-button text-blue-600 mr-2"></i> Instal Aplikasi di Layar Utama HP
-                    </h2>
-                    <p class="text-xs text-slate-500">Jadikan aplikasi ini seperti aplikasi Native di Android / iPhone tanpa perlu Play Store/App Store.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                    <!-- Android Steps -->
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                        <div class="flex items-center font-bold text-slate-800 gap-2">
-                            <i class="fa-brands fa-android text-emerald-600 text-lg"></i>
-                            <span>Panduan Android (Google Chrome)</span>
-                        </div>
-                        <ol class="list-decimal list-inside space-y-1.5 text-slate-600 leading-relaxed">
-                            <li>Buka halaman web ini di browser Chrome.</li>
-                            <li>Ketuk titik tiga <strong class="text-slate-800">(⋮)</strong> di sudut kanan atas.</li>
-                            <li>Pilih menu <strong class="text-slate-800">"Tambahkan ke Layar Utama"</strong> atau <strong class="text-slate-800">"Install aplikasi"</strong>.</li>
-                            <li>Selesai! Ikon TSS Report akan muncul di daftar aplikasi HP Anda.</li>
-                        </ol>
-                    </div>
-
-                    <!-- iOS Steps -->
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                        <div class="flex items-center font-bold text-slate-800 gap-2">
-                            <i class="fa-brands fa-apple text-slate-800 text-lg"></i>
-                            <span>Panduan iPhone / iPad (Safari)</span>
-                        </div>
-                        <ol class="list-decimal list-inside space-y-1.5 text-slate-600 leading-relaxed">
-                            <li>Buka halaman web ini menggunakan browser <strong class="text-slate-800">Safari</strong>.</li>
-                            <li>Ketuk tombol Bagikan <strong class="text-slate-800">(Share icon / kotak panah ke atas)</strong> di bagian bawah layar.</li>
-                            <li>Gulir ke bawah dan ketuk <strong class="text-slate-800">"Add to Home Screen"</strong> (Tambahkan ke Layar Utama).</li>
-                            <li>Ketuk <strong class="text-slate-800">"Add"</strong> di pojok kanan atas.</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl text-xs text-blue-900 space-y-1">
-                    <p class="font-bold flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-info text-blue-600"></i> Informasi Sistem
-                    </p>
-                    <p class="text-blue-800 leading-relaxed">
-                        Aplikasi Pelaporan TSS didesain khusus untuk mendukung kecepatan operasional petugas di lapangan. Data riwayat laporan disimpan secara aman pada memori lokal perangkat Anda.
-                    </p>
-                </div>
-            </div>
-        </div>
-
     </main>
 
     <!-- Mobile Bottom Navigation Bar (App Shell style) -->
@@ -552,10 +585,6 @@
             <i class="fa-solid fa-clock-rotate-left text-base mb-0.5"></i>
             <span class="text-[10px]">Riwayat</span>
             <span id="mbBadgeHistory" class="absolute top-0.5 right-1/4 bg-blue-600 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
-        </button>
-        <button onclick="switchTab('infoTab')" id="mbNavInfo" class="flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition">
-            <i class="fa-solid fa-circle-info text-base mb-0.5"></i>
-            <span class="text-[10px]">App Info</span>
         </button>
     </nav>
 
@@ -647,6 +676,7 @@
                 if (presetType === 'toilet') locSelect.value = 'Toilet';
                 else if (presetType === 'mushola') locSelect.value = 'Mushola';
                 else if (presetType === 'konten') locSelect.value = 'Update Konten';
+                else if (presetType === 'umroh') locSelect.value = 'Split Umroh';
                 else locSelect.value = 'Checkin';
                 handleLocationChange();
             } else {
@@ -664,6 +694,18 @@
                     // Ignore if vibration is not allowed or supported
                 }
             }
+        }
+
+        // Fill Current Time (HH:MM) into Target Input
+        function setCurrentTimeToInput(inputId) {
+            triggerHaptic();
+            const el = document.getElementById(inputId);
+            if (!el) return;
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            el.value = `${hours}:${minutes}`;
+            generateReportText();
         }
 
         // Global State Variables
@@ -690,7 +732,7 @@
         const toiletPresetFacilities = [
             { id: 'tf1', name: 'Urinoir', status: '✅' },
             { id: 'tf2', name: 'Wastafel', status: '✅' },
-            { id: 'tf3', name: 'Cubicle', status: '✅' },
+            { id: 'tf3', name: 'Cubikal', status: '✅' },
             { id: 'tf4', name: 'Handsoap', status: '✅' },
             { id: 'tf5', name: 'Tisu', status: '✅' },
             { id: 'tf6', name: 'Debit air', status: '✅' }
@@ -706,7 +748,6 @@
         const kontenPresetFacilities = [
             // 1. Keberangkatan
             { id: 'kf1', name: 'Island A-B', status: '1 Titik', category: '1. Digital banner keberangkatan' },
-            { id: 'kf1', name: 'Island B-C', status: '1 Titik', category: '1. Digital banner keberangkatan' },
             { id: 'kf2', name: 'Island D-E', status: '1 Titik', category: '1. Digital banner keberangkatan' },
             { id: 'kf3', name: 'Island E-F', status: '1 Titik', category: '1. Digital banner keberangkatan' },
             { id: 'kf4', name: 'ME 1', status: '1 Titik', category: '1. Digital banner keberangkatan' },
@@ -766,7 +807,7 @@
         // Tab Switching Logic
         function switchTab(tabId) {
             triggerHaptic();
-            ['formTab', 'historyTab', 'infoTab'].forEach(id => {
+            ['formTab', 'historyTab'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
                     if (id === tabId) el.classList.remove('hidden');
@@ -776,19 +817,13 @@
 
             const navForm = document.getElementById('mbNavForm');
             const navHistory = document.getElementById('mbNavHistory');
-            const navInfo = document.getElementById('mbNavInfo');
 
             if (navForm) navForm.className = (tabId === 'formTab') ? "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition" : "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition";
             if (navHistory) navHistory.className = (tabId === 'historyTab') ? "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition relative" : "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition relative";
-            if (navInfo) navInfo.className = (tabId === 'infoTab') ? "flex flex-col items-center justify-center w-full py-1 text-blue-400 font-bold transition" : "flex flex-col items-center justify-center w-full py-1 hover:text-slate-200 font-medium transition";
 
             if (tabId === 'historyTab') {
                 renderHistoryList();
             }
-        }
-
-        function showInstallPWAInstruction() {
-            switchTab('infoTab');
         }
 
         // Toggle Accordion Pengecekan Fasilitas
@@ -879,10 +914,18 @@
             const isToiletCheck = (currentPreset === 'toilet') || (location.toLowerCase().includes('toilet'));
             const isMusholaCheck = (currentPreset === 'mushola') || (location.toLowerCase().includes('mushola'));
             const isKontenCheck = (currentPreset === 'konten') || (location.toLowerCase().includes('konten'));
+            const isUmrohCheck = (currentPreset === 'umroh') || (location.toLowerCase().includes('umroh'));
 
             const toiletContainer = document.getElementById('toiletDetailContainer');
             const musholaContainer = document.getElementById('musholaDetailContainer');
             const kontenContainer = document.getElementById('kontenDetailContainer');
+            const umrohContainer = document.getElementById('umrohDetailContainer');
+            const facilitySection = document.getElementById('facilityCheckSection');
+
+            if (facilitySection) {
+                if (isUmrohCheck) facilitySection.classList.add('hidden');
+                else facilitySection.classList.remove('hidden');
+            }
 
             if (toiletContainer) {
                 if (isToiletCheck) toiletContainer.classList.remove('hidden');
@@ -895,6 +938,49 @@
             if (kontenContainer) {
                 if (isKontenCheck) kontenContainer.classList.remove('hidden');
                 else kontenContainer.classList.add('hidden');
+            }
+            if (umrohContainer) {
+                if (isUmrohCheck) umrohContainer.classList.remove('hidden');
+                else umrohContainer.classList.add('hidden');
+            }
+
+            // Mode Khusus Laporan Split Umroh
+            if (isUmrohCheck) {
+                const flightNo = document.getElementById('inputUmrohFlight')?.value.trim() || '';
+                const busKe = document.getElementById('inputUmrohBusKe')?.value.trim() || '';
+                const busNo = document.getElementById('inputUmrohBusNo')?.value.trim() || '';
+                
+                const jamReq = document.getElementById('inputUmrohJamReq')?.value.trim() || '';
+                const jamDatang = document.getElementById('inputUmrohJamDatang')?.value.trim() || '';
+                const jamBerangkat = document.getElementById('inputUmrohJamBerangkat')?.value.trim() || '';
+
+                let totalPax = document.getElementById('inputUmrohTotalPax')?.value.trim() || '';
+                if (totalPax && !totalPax.toLowerCase().includes('pax')) totalPax += ' pax';
+
+                const rute = document.getElementById('inputUmrohRute')?.value.trim() || 'T3 menuju ke T2';
+                const greetingLower = greeting.charAt(0) + greeting.slice(1).toLowerCase();
+
+                const validNotes = notes.filter(n => n.trim() !== '');
+                const noteText = validNotes.length > 0 ? validNotes.join(', ') : '-';
+
+                let msg = `${greetingLower},\n`;
+                msg += `melaporkan kegiatan bussing split operation : \n\n`;
+                msg += `No. Flight : ${flightNo}\n \n`;
+                msg += `Bus ke : ${busKe} \n`;
+                msg += `No. Bus : ${busNo}\n`;
+                msg += `Jam Bus Request : ${jamReq}\n`;
+                msg += `Jam Bus Datang : ${jamDatang} \n`;
+                msg += `Jam Bus Berangkat : ${jamBerangkat}\n`;
+                msg += `Total pax : ${totalPax}\n`;
+                msg += `Note : ${noteText}\n\n`;
+                msg += `Jamaah umroh berangkat dari ${rute}.\n`;
+                msg += `Demikian disampaikan, terima kasih`;
+
+                const previewBox = document.getElementById('reportPreviewBox');
+                if (previewBox) {
+                    previewBox.innerText = msg;
+                }
+                return msg;
             }
 
             // Mode Khusus Laporan Update Konten
@@ -1016,10 +1102,16 @@
                 if (currentPreset !== 'konten') {
                     loadFacilityPreset('konten');
                 }
+            } else if (select.value === 'Split Umroh') {
+                customInput.classList.add('hidden');
+                hiddenLoc.value = 'Split Umroh';
+                if (currentPreset !== 'umroh') {
+                    loadFacilityPreset('umroh');
+                }
             } else {
                 customInput.classList.add('hidden');
                 hiddenLoc.value = select.value;
-                if (currentPreset === 'toilet' || currentPreset === 'mushola' || currentPreset === 'konten') {
+                if (currentPreset === 'toilet' || currentPreset === 'mushola' || currentPreset === 'konten' || currentPreset === 'umroh') {
                     loadFacilityPreset('general');
                 }
             }
@@ -1041,24 +1133,28 @@
             const btnToi = document.getElementById('btnPresetToilet');
             const btnMus = document.getElementById('btnPresetMushola');
             const btnKon = document.getElementById('btnPresetKonten');
+            const btnUmr = document.getElementById('btnPresetUmroh');
 
-            if (btnGen) btnGen.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
-            if (btnToi) btnToi.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
-            if (btnMus) btnMus.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
-            if (btnKon) btnKon.className = "text-xs px-2.5 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-medium hover:bg-slate-200 transition active:scale-95";
+            if (btnGen) btnGen.className = "text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95";
+            if (btnToi) btnToi.className = "text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95";
+            if (btnMus) btnMus.className = "text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95";
+            if (btnKon) btnKon.className = "text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95";
+            if (btnUmr) btnUmr.className = "text-[10px] px-2 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-medium hover:bg-slate-200 transition active:scale-95";
 
             if (presetType === 'toilet') {
                 facilities = JSON.parse(JSON.stringify(toiletPresetFacilities));
-                if (btnToi) btnToi.className = "text-xs px-2.5 py-1.5 bg-teal-600 text-white border border-teal-700 rounded-lg font-medium shadow-sm transition active:scale-95";
+                if (btnToi) btnToi.className = "text-[10px] px-2 py-1 bg-teal-600 text-white border border-teal-700 rounded-md font-medium shadow-sm transition active:scale-95";
             } else if (presetType === 'mushola') {
                 facilities = JSON.parse(JSON.stringify(musholaPresetFacilities));
-                if (btnMus) btnMus.className = "text-xs px-2.5 py-1.5 bg-emerald-600 text-white border border-emerald-700 rounded-lg font-medium shadow-sm transition active:scale-95";
+                if (btnMus) btnMus.className = "text-[10px] px-2 py-1 bg-emerald-600 text-white border border-emerald-700 rounded-md font-medium shadow-sm transition active:scale-95";
             } else if (presetType === 'konten') {
                 facilities = JSON.parse(JSON.stringify(kontenPresetFacilities));
-                if (btnKon) btnKon.className = "text-xs px-2.5 py-1.5 bg-purple-600 text-white border border-purple-700 rounded-lg font-medium shadow-sm transition active:scale-95";
+                if (btnKon) btnKon.className = "text-[10px] px-2 py-1 bg-purple-600 text-white border border-purple-700 rounded-md font-medium shadow-sm transition active:scale-95";
+            } else if (presetType === 'umroh') {
+                if (btnUmr) btnUmr.className = "text-[10px] px-2 py-1 bg-amber-600 text-white border border-amber-700 rounded-md font-medium shadow-sm transition active:scale-95";
             } else {
                 facilities = JSON.parse(JSON.stringify(defaultFacilities));
-                if (btnGen) btnGen.className = "text-xs px-2.5 py-1.5 bg-blue-600 text-white border border-blue-700 rounded-lg font-medium shadow-sm transition active:scale-95";
+                if (btnGen) btnGen.className = "text-[10px] px-2 py-1 bg-blue-600 text-white border border-blue-700 rounded-md font-medium shadow-sm transition active:scale-95";
             }
 
             renderFacilities();
@@ -1525,6 +1621,17 @@
             if (musholaDetailInput) musholaDetailInput.value = '';
             document.getElementById('musholaDetailContainer').classList.add('hidden');
 
+            const umrohContainer = document.getElementById('umrohDetailContainer');
+            if (umrohContainer) {
+                umrohContainer.classList.add('hidden');
+                ['inputUmrohFlight', 'inputUmrohBusKe', 'inputUmrohBusNo', 'inputUmrohJamReq', 'inputUmrohJamDatang', 'inputUmrohJamBerangkat', 'inputUmrohTotalPax'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
+                const ruteEl = document.getElementById('inputUmrohRute');
+                if (ruteEl) ruteEl.value = 'T3 menuju ke T2';
+            }
+
             document.getElementById('inputOfficer').value = '';
             document.getElementById('inputUnit').value = 'TSS T3 Internasional';
             
@@ -1589,32 +1696,6 @@
             registerOfflineServiceWorker();
         });
 
-        // Dynamic PWA Install Prompt Handler
-        let deferredPrompt = null;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const btn = document.getElementById('pwaInstallBtn');
-            if (btn) {
-                btn.classList.add('animate-pulse', 'bg-blue-600');
-            }
-        });
-
-        function triggerPWAInstall() {
-            triggerHaptic();
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        showToast("Aplikasi berhasil diinstal ke HP!", "success");
-                    }
-                    deferredPrompt = null;
-                });
-            } else {
-                showInstallPWAInstruction();
-            }
-        }
-
         // Inline Service Worker untuk Mode Luring (Offline PWA)
         function registerOfflineServiceWorker() {
             if ('serviceWorker' in navigator) {
@@ -1644,3 +1725,4 @@
     </script>
 </body>
 </html>
+```
